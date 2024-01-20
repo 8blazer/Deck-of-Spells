@@ -14,6 +14,10 @@ public class DeckManager : MonoBehaviour
 
 	public TMP_Text deckText;
 	public TMP_Text discardText;
+	public TMP_Text comboText;
+
+	private CardColor comboColor;
+	private int comboNumber;
 
 
     // Start is called before the first frame update
@@ -46,12 +50,6 @@ public class DeckManager : MonoBehaviour
 
 		for (int i = 0; i < 3; i++)
 		{
-			GameObject card = Instantiate(cardPrefab, new Vector3((i * 200) + 150, 160, 0), Quaternion.identity);
-			selectedCards.Add(card);
-			int cardValue = UnityEngine.Random.Range(0, deck.Count - 1);
-			card.GetComponent<Card>().cardName = deck[cardValue];
-			deck.RemoveAt(cardValue);
-			card.transform.SetParent(canvas.transform);
 			if (deck.Count == 0)
 			{
 				if (discardDeck.Count > 0)
@@ -65,8 +63,15 @@ public class DeckManager : MonoBehaviour
 				else
 				{
 					i = 4;
+					break;
 				}
 			}
+			GameObject card = Instantiate(cardPrefab, new Vector3((i * 200) + 150, 160, 0), Quaternion.identity);
+			selectedCards.Add(card);
+			int cardValue = UnityEngine.Random.Range(0, deck.Count - 1);
+			card.GetComponent<Card>().cardName = deck[cardValue];
+			deck.RemoveAt(cardValue);
+			card.transform.SetParent(canvas.transform);
 		}
 
 		/*
@@ -79,6 +84,23 @@ public class DeckManager : MonoBehaviour
 		deckText.text = "Cards left in deck: " + deck.Count;
 		discardText.text = "Cards in discard: " + discardDeck.Count;
 
+	}
+
+	public void UpdateCombo(CardColor color)
+	{
+		if (color == comboColor)
+		{
+			if (comboNumber < 3)
+			{
+				comboNumber++;
+			}
+		}
+		else
+		{
+			comboColor = color;
+			comboNumber = 1;
+		}
+		comboText.text = "Combo: " + comboColor.ToString() + " " + comboNumber;
 	}
 
 

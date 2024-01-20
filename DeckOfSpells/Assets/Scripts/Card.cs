@@ -13,6 +13,7 @@ public class Card : MonoBehaviour
     [SerializeField] private TMP_Text nameText;
     private GameObject deckManager;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +43,7 @@ public class Card : MonoBehaviour
     public void PlayCard()
     {
         deckManager.GetComponent<DeckManager>().selectedCards.Remove(this.gameObject);
+        deckManager.GetComponent<DeckManager>().UpdateCombo(cardColor);
         deckManager.GetComponent<DeckManager>().ChooseCards();
 		Destroy(this.gameObject);
 	}
