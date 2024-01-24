@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     
-    [SerializeField] private CardColor cardColor;
+    private CardColor cardColor;
     public CardName cardName;
     [SerializeField] private TMP_Text nameText;
     private GameObject deckManager;
@@ -38,12 +38,51 @@ public class Card : MonoBehaviour
                 GetComponent<Image>().color = new Color(255, 255, 0);
                 break;
         }
+        if (cardColor == deckManager.GetComponent<DeckManager>().comboDelayColor)
+        {
+            GetComponent<Button>().interactable = false;
+        }
     }
-    
-    public void PlayCard()
+
+	public void PlayCard()
     {
+		deckManager.GetComponent<DeckManager>().UpdateCombo(cardColor);
+		GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+
+        switch (cardName)
+        {
+            case CardName.Lightning:
+
+                if (deckManager.GetComponent<DeckManager>().comboNumber == 1)
+                {
+                    enemy.GetComponent<Enemy>().TakeDamage(2);
+                }
+                else if (deckManager.GetComponent<DeckManager>().comboNumber == 2)
+                {
+					enemy.GetComponent<Enemy>().TakeDamage(3);
+				}
+                else
+                {
+					enemy.GetComponent<Enemy>().TakeDamage(4);
+				}
+                break;
+            case CardName.Fireball:
+				if (deckManager.GetComponent<DeckManager>().comboNumber == 1)
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(1);
+				}
+				else if (deckManager.GetComponent<DeckManager>().comboNumber == 2)
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(4);
+				}
+				else
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(7);
+				}
+				break;
+        }
+
         deckManager.GetComponent<DeckManager>().selectedCards.Remove(this.gameObject);
-        deckManager.GetComponent<DeckManager>().UpdateCombo(cardColor);
         deckManager.GetComponent<DeckManager>().ChooseCards();
 		Destroy(this.gameObject);
 	}
@@ -54,7 +93,7 @@ public class Card : MonoBehaviour
 
 }
 
-public enum CardColor { Red, Blue, Green, Yellow };
+public enum CardColor { Red, Blue, Green, Yellow, None }
 public enum CardName { 
     Fireball, 
     Lightning, 

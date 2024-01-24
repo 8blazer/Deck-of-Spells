@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class DeckManager : MonoBehaviour
 {
@@ -16,15 +17,29 @@ public class DeckManager : MonoBehaviour
 	public TMP_Text discardText;
 	public TMP_Text comboText;
 
-	private CardColor comboColor;
-	private int comboNumber;
+	private CardColor comboColor = CardColor.None;
+	public int comboNumber;
+	private bool comboDelay = false;
+	private int comboDelayTimer = 0;
+	public CardColor comboDelayColor = CardColor.None;
 
 
     // Start is called before the first frame update
     void Start()
     {
+
 		deck.Add(CardName.Fireball);
-        deck.Add(CardName.Lightning);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Spikey);
 		deck.Add(CardName.Wall);
@@ -35,6 +50,10 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Frighten);
 		deck.Add(CardName.Freeze);
 		deck.Add(CardName.ComboBreaker);
+		deck.Add(CardName.Boost);
+		deck.Add(CardName.Boost);
+		deck.Add(CardName.Boost);
+		deck.Add(CardName.Boost);
 
 		ChooseCards();
 	}
@@ -74,13 +93,6 @@ public class DeckManager : MonoBehaviour
 			card.transform.SetParent(canvas.transform);
 		}
 
-		/*
-		for (int i = 0; i < selectedCards.Count; i++)
-		{
-			discardDeck.Add(selectedCards[i].GetComponent<Card>().cardName);
-		}
-		*/
-
 		deckText.text = "Cards left in deck: " + deck.Count;
 		discardText.text = "Cards in discard: " + discardDeck.Count;
 
@@ -94,13 +106,29 @@ public class DeckManager : MonoBehaviour
 			{
 				comboNumber++;
 			}
+			if (comboNumber == 3)
+			{
+				comboDelay = true;
+				comboDelayColor = color;
+			}
 		}
 		else
 		{
 			comboColor = color;
 			comboNumber = 1;
 		}
-		comboText.text = "Combo: " + comboColor.ToString() + " " + comboNumber;
+		comboText.text = "Combo: " + comboColor + " " + comboNumber;
+
+		if (comboDelay)
+		{
+			comboDelayTimer++;
+			if (comboDelayTimer > 2)
+			{
+				comboDelay = false;
+				comboDelayTimer = 0;
+				comboDelayColor = CardColor.None;
+			}
+		}
 	}
 
 
