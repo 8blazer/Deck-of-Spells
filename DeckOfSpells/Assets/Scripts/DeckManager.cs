@@ -20,8 +20,9 @@ public class DeckManager : MonoBehaviour
 	private CardColor comboColor = CardColor.None;
 	public int comboNumber;
 	private bool comboDelay = false;
-	private int comboDelayTimer = 0;
+	public int comboDelayTimer = 0;
 	public CardColor comboDelayColor = CardColor.None;
+	[SerializeField] private Button endTurnButton;
 
 
     // Start is called before the first frame update
@@ -93,9 +94,23 @@ public class DeckManager : MonoBehaviour
 			card.transform.SetParent(canvas.transform);
 		}
 
+		StartCoroutine(CheckCardValidity());
+
 		deckText.text = "Cards left in deck: " + deck.Count;
 		discardText.text = "Cards in discard: " + discardDeck.Count;
 
+	}
+
+	private IEnumerator CheckCardValidity()
+	{
+		yield return new WaitForSeconds(0.1f);
+		foreach (GameObject c in selectedCards)
+		{
+			if (c.GetComponent<Button>().interactable)
+			{
+				endTurnButton.GetComponent<Button>().interactable = false;
+			}
+		}
 	}
 
 	public void UpdateCombo(CardColor color)

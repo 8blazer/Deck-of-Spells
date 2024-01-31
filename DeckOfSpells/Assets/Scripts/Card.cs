@@ -12,12 +12,14 @@ public class Card : MonoBehaviour
     public CardName cardName;
     [SerializeField] private TMP_Text nameText;
     private GameObject deckManager;
+    [SerializeField] private GameObject endTurnButton;
 
 
     // Start is called before the first frame update
     void Start()
     {
         deckManager = GameObject.FindWithTag("GameController");
+        endTurnButton = GameObject.Find("EndTurnButton");
         nameText.text = cardName.ToString();
         switch (cardName)
         {
@@ -42,6 +44,11 @@ public class Card : MonoBehaviour
         {
             GetComponent<Button>().interactable = false;
         }
+    }
+
+    public void SelectCard()
+    {
+        endTurnButton.GetComponent<EndTurnButton>().setCard(this);
     }
 
 	public void PlayCard()

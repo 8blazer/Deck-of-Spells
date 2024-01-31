@@ -6,7 +6,7 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
-    private int health = 15;
+    private int health = 105;
 
     // Start is called before the first frame update
     void Start()

@@ -258,7 +258,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9045351885005445249}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: PlayCard
+        m_MethodName: SelectCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -280,6 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be4cfb60cb38b844b19881e07e58f51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardColor: 0
   cardName: 0
   nameText: {fileID: 6112778257079600777}
+  endTurnButton: {fileID: 0}
