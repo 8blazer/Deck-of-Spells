@@ -146,5 +146,9 @@ public class DeckManager : MonoBehaviour
 		}
 	}
 
+	public CardColor GetComboColor()
+	{
+		return comboColor;
+	}
 
 }

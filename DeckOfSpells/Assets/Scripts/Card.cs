@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class Card : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Card : MonoBehaviour
     [SerializeField] private TMP_Text nameText;
     private GameObject deckManager;
     [SerializeField] private GameObject endTurnButton;
+    private GameObject turnManager;
+    private int cardPriority = 0;
 
 
     // Start is called before the first frame update
@@ -20,84 +23,69 @@ public class Card : MonoBehaviour
     {
         deckManager = GameObject.FindWithTag("GameController");
         endTurnButton = GameObject.Find("EndTurnButton");
+        turnManager = GameObject.Find("TurnManager");
         nameText.text = cardName.ToString();
         switch (cardName)
         {
             case CardName.Fireball: case CardName.Lightning:
                 cardColor = CardColor.Red;
                 GetComponent<Image>().color = new Color(255, 0, 0);
+                cardPriority = 100;
+                if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Red)
+                {
+                    cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
+                }
                 break;
             case CardName.Tree: case CardName.Spikey: case CardName.Wall:
                 cardColor = CardColor.Blue;
                 GetComponent<Image>().color = new Color(0, 0, 255);
-                break;
+				cardPriority = 75;
+				if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Blue)
+				{
+					cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
+				}
+				break;
             case CardName.Revivify: case CardName.Cure: case CardName.Boost: case CardName.ComboBooster: case CardName.Reflect:
                 cardColor = CardColor.Green;
                 GetComponent<Image>().color = new Color(0, 255, 0);
-                break;
+				cardPriority = 50;
+				if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Green)
+				{
+					cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
+				}
+				break;
             default:
                 cardColor = CardColor.Yellow;
                 GetComponent<Image>().color = new Color(255, 255, 0);
-                break;
+				cardPriority = 25;
+				if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Yellow)
+				{
+					cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
+				}
+				break;
         }
         if (cardColor == deckManager.GetComponent<DeckManager>().comboDelayColor)
         {
             GetComponent<Button>().interactable = false;
         }
+        if (cardName == CardName.ComboBreaker)
+        {
+            cardPriority = 999;
+        }
+
     }
 
     public void SelectCard()
     {
         endTurnButton.GetComponent<EndTurnButton>().setCard(this);
     }
-
 	public void PlayCard()
     {
 		deckManager.GetComponent<DeckManager>().UpdateCombo(cardColor);
-		GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
-
-        switch (cardName)
-        {
-            case CardName.Lightning:
-
-                if (deckManager.GetComponent<DeckManager>().comboNumber == 1)
-                {
-                    enemy.GetComponent<Enemy>().TakeDamage(2);
-                }
-                else if (deckManager.GetComponent<DeckManager>().comboNumber == 2)
-                {
-					enemy.GetComponent<Enemy>().TakeDamage(3);
-				}
-                else
-                {
-					enemy.GetComponent<Enemy>().TakeDamage(4);
-				}
-                break;
-            case CardName.Fireball:
-				if (deckManager.GetComponent<DeckManager>().comboNumber == 1)
-				{
-					enemy.GetComponent<Enemy>().TakeDamage(1);
-				}
-				else if (deckManager.GetComponent<DeckManager>().comboNumber == 2)
-				{
-					enemy.GetComponent<Enemy>().TakeDamage(4);
-				}
-				else
-				{
-					enemy.GetComponent<Enemy>().TakeDamage(7);
-				}
-				break;
-        }
-
+        turnManager.GetComponent<TurnManager>().SetPlayerCard(cardName, cardPriority);
         deckManager.GetComponent<DeckManager>().selectedCards.Remove(this.gameObject);
-        deckManager.GetComponent<DeckManager>().ChooseCards();
 		Destroy(this.gameObject);
 	}
-
-
-
-
-
 }
 
 public enum CardColor { Red, Blue, Green, Yellow, None }
@@ -116,5 +104,6 @@ public enum CardName {
     Lullaby,
     Freeze,
     Poison,
-    ComboBreaker
+    ComboBreaker,
+    None
 }
