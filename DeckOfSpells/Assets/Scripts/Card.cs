@@ -27,7 +27,7 @@ public class Card : MonoBehaviour
         nameText.text = cardName.ToString();
         switch (cardName)
         {
-            case CardName.Fireball: case CardName.Lightning:
+            case CardName.Fireball: case CardName.Lightning: case CardName.Landslide:
                 cardColor = CardColor.Red;
                 GetComponent<Image>().color = new Color(255, 0, 0);
                 cardPriority = 100;
@@ -82,8 +82,8 @@ public class Card : MonoBehaviour
 	public void PlayCard()
     {
 		deckManager.GetComponent<DeckManager>().UpdateCombo(cardColor);
-        turnManager.GetComponent<TurnManager>().SetPlayerCard(cardName, cardPriority);
-        deckManager.GetComponent<DeckManager>().selectedCards.Remove(this.gameObject);
+		deckManager.GetComponent<DeckManager>().selectedCards.Remove(this.gameObject);
+		turnManager.GetComponent<TurnManager>().SetPlayerCard(cardName, cardPriority);
 		Destroy(this.gameObject);
 	}
 }
@@ -92,6 +92,7 @@ public enum CardColor { Red, Blue, Green, Yellow, None }
 public enum CardName { 
     Fireball, 
     Lightning, 
+    Landslide,
     Tree, 
     Spikey, 
     Wall, 

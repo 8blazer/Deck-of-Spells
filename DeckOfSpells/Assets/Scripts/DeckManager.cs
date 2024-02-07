@@ -35,11 +35,11 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Lightning);
+		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Spikey);

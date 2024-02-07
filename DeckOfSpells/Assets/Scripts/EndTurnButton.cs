@@ -7,10 +7,11 @@ public class EndTurnButton : MonoBehaviour
 {
     private Card selectedCard;
     [SerializeField] private GameObject deckManager;
+	[SerializeField] private GameObject turnManager;
 
 
-    // Start is called before the first frame update
-    void Start()
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -30,7 +31,8 @@ public class EndTurnButton : MonoBehaviour
         else
         {
             deckManager.GetComponent<DeckManager>().UpdateCombo(CardColor.None);
-            deckManager.GetComponent<DeckManager>().ChooseCards();
+            turnManager.GetComponent<TurnManager>().PlayTurn();
+
         }
     }
 

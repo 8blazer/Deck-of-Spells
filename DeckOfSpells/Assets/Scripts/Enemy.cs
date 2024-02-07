@@ -13,6 +13,12 @@ public class Enemy : MonoBehaviour
 	List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
 
+	private CardColor comboColor = CardColor.None;
+	public int comboNumber;
+	private bool comboDelay = false;
+	public int comboDelayTimer = 0;
+	public CardColor comboDelayColor = CardColor.None;
+
 	// Start is called before the first frame update
 	void Start()
     {
@@ -23,7 +29,10 @@ public class Enemy : MonoBehaviour
 		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
+        deck.Add(CardName.Landslide);
 		deck.Add(CardName.ComboBreaker);
+
+        SelectCard();
 	}
 
     // Update is called once per frame
@@ -46,6 +55,18 @@ public class Enemy : MonoBehaviour
 			selectedCards.Add(deck[i]);
             deck.RemoveAt(i);
         }
+
+		CardName selectedCard = deck[0];
+		switch (selectedCard)
+		{
+			case CardName.Fireball: case CardName.Lightning: case CardName.Landslide:
+				UpdateCombo(CardColor.Red);
+				break;
+			default:
+				UpdateCombo(CardColor.Green);
+				break;
+		}
+		turnManager.GetComponent<TurnManager>().SetEnemyCard(deck[0], 1);
     }
 
     public void TakeDamage(int damage)
@@ -62,4 +83,41 @@ public class Enemy : MonoBehaviour
     {
         return health;
     }
+
+	public void UpdateCombo(CardColor color)
+	{
+		if (color == comboColor)
+		{
+			if (comboNumber < 3)
+			{
+				comboNumber++;
+			}
+			if (comboNumber == 3)
+			{
+				comboDelay = true;
+				comboDelayColor = color;
+			}
+		}
+		else
+		{
+			comboColor = color;
+			comboNumber = 1;
+		}
+
+		if (comboDelay)
+		{
+			comboDelayTimer++;
+			if (comboDelayTimer > 2)
+			{
+				comboDelay = false;
+				comboDelayTimer = 0;
+				comboDelayColor = CardColor.None;
+			}
+		}
+	}
+
+	public CardColor GetComboColor()
+	{
+		return comboColor;
+	}
 }
