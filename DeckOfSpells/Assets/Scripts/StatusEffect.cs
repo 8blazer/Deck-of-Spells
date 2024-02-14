@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class StatusEffect : MonoBehaviour
 {
     private Status status;
     private Player player;
+	private GameObject canvas;
 
 	private Dictionary<Status, int> statusList = new Dictionary<Status, int>();
 	private List<GameObject> effectObjects = new List<GameObject>();
@@ -16,6 +18,8 @@ public class StatusEffect : MonoBehaviour
 	void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
+		canvas = GameObject.Find("Canvas");
+		transform.SetParent(canvas.transform);
     }
 
 	public Dictionary<Status, int> GetStatusList()
@@ -63,10 +67,9 @@ public class StatusEffect : MonoBehaviour
 		for (int i = 0; i < updateList.Count; i++)
 		{
 			statusList[updateList[i]]--;
-			if (updateList[i] == 0)
+			if (statusList[updateList[i]] == 0)
 			{
 				DeleteStatus(updateList[i]);
-				i--;
 			}
 		}
 	}
@@ -79,7 +82,7 @@ public class StatusEffect : MonoBehaviour
 			{
 				Destroy(effectObjects[i]);
 				effectObjects.RemoveAt(i);
-				i--;
+				break;
 			}
 		}
 		statusList.Remove(s);

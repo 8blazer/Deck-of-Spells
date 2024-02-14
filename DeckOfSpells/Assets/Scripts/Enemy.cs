@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
 	List<CardName> discardDeck = new List<CardName>();
 	List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
+	private int cardPriority = 0;
 
 	private CardColor comboColor = CardColor.None;
 	public int comboNumber;
@@ -60,13 +61,15 @@ public class Enemy : MonoBehaviour
 		switch (selectedCard)
 		{
 			case CardName.Fireball: case CardName.Lightning: case CardName.Landslide:
+				cardPriority = 100 + comboNumber;
 				UpdateCombo(CardColor.Red);
 				break;
 			default:
+				cardPriority = 50 + comboNumber;
 				UpdateCombo(CardColor.Green);
 				break;
 		}
-		turnManager.GetComponent<TurnManager>().SetEnemyCard(deck[0], 1);
+		turnManager.GetComponent<TurnManager>().SetEnemyCard(deck[0], cardPriority);
     }
 
     public void TakeDamage(int damage)

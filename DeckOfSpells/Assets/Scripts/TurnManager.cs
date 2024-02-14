@@ -48,25 +48,32 @@ public class TurnManager : MonoBehaviour
         {
 			if (playerPriority >= enemyPriority)
 			{
+				Debug.Log("Player first");
 				PlayerTurn();
+				player.GetComponent<StatusEffect>().UpdateStatus();
 				if (enemy.GetComponent<Enemy>().GetHealth() > 0)
 				{
 					EnemyTurn();
+					enemy.GetComponent<StatusEffect>().UpdateStatus();
 				}
 			}
 			else
 			{
+				Debug.Log("Enemy first");
 				EnemyTurn();
+				enemy.GetComponent<StatusEffect>().UpdateStatus();
 				if (player.GetComponent<Player>().GetHealth() > 0)
 				{
 					PlayerTurn();
+					player.GetComponent<StatusEffect>().UpdateStatus();
 				}
 			}
 		}
         else
         {
             EnemyTurn();
-        }
+			enemy.GetComponent<StatusEffect>().UpdateStatus();
+		}
 		if (player.GetComponent<Player>().GetHealth() < 1)
 		{
 			outcomeText.text = "Enemy Wins!";
@@ -79,8 +86,6 @@ public class TurnManager : MonoBehaviour
 		}
 		else
 		{
-			player.GetComponent<StatusEffect>().UpdateStatus();
-			enemy.GetComponent<StatusEffect>().UpdateStatus();
 			enemy.GetComponent<Enemy>().SelectCard();
 			deckManager.ChooseCards();
 		}
