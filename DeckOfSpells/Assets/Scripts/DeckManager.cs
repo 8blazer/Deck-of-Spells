@@ -50,6 +50,12 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.ComboBooster);
 		deck.Add(CardName.Frighten);
 		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
 		deck.Add(CardName.ComboBreaker);
 		deck.Add(CardName.Boost);
 		deck.Add(CardName.Boost);
@@ -144,6 +150,16 @@ public class DeckManager : MonoBehaviour
 				comboDelayColor = CardColor.None;
 			}
 		}
+	}
+
+	public void GameEnd()
+	{
+		while (selectedCards.Count > 0)
+		{
+			Destroy(selectedCards[0]);
+			selectedCards.RemoveAt(0);
+		}
+		endTurnButton.GetComponent <Button>().interactable = false;
 	}
 
 	public CardColor GetComboColor()

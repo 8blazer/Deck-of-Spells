@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TurnManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject enemy;
     [SerializeField] private DeckManager deckManager;
+
+	[SerializeField] private TMP_Text outcomeText;
 
 
 
@@ -64,10 +67,23 @@ public class TurnManager : MonoBehaviour
         {
             EnemyTurn();
         }
-		player.GetComponent<StatusEffect>().UpdateStatus();
-		enemy.GetComponent<StatusEffect>().UpdateStatus();
-		enemy.GetComponent<Enemy>().SelectCard();
-		deckManager.ChooseCards();
+		if (player.GetComponent<Player>().GetHealth() < 1)
+		{
+			outcomeText.text = "Enemy Wins!";
+			deckManager.GameEnd();
+		}
+		else if (enemy.GetComponent<Enemy>().GetHealth() < 1)
+		{
+			outcomeText.text = "Player Wins!";
+			deckManager.GameEnd();
+		}
+		else
+		{
+			player.GetComponent<StatusEffect>().UpdateStatus();
+			enemy.GetComponent<StatusEffect>().UpdateStatus();
+			enemy.GetComponent<Enemy>().SelectCard();
+			deckManager.ChooseCards();
+		}
     }
 
     private void PlayerTurn()
@@ -123,6 +139,9 @@ public class TurnManager : MonoBehaviour
 				break;
 			case CardName.Landslide:
                 enemy.GetComponent<Enemy>().TakeDamage(3);
+				break;
+			case CardName.Freeze:
+				enemy.GetComponent<StatusEffect>().AddStatus(Status.Frozen, deckManager.comboNumber);
 				break;
 		}
     }

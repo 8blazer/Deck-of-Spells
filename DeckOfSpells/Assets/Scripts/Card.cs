@@ -58,6 +58,7 @@ public class Card : MonoBehaviour
                 cardColor = CardColor.Yellow;
                 GetComponent<Image>().color = new Color(255, 255, 0);
 				cardPriority = 25;
+                nameText.color = new Color(0, 0, 0);
 				if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Yellow)
 				{
 					cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
