@@ -15,6 +15,7 @@ public class Card : MonoBehaviour
     private GameObject deckManager;
     [SerializeField] private GameObject endTurnButton;
     private GameObject turnManager;
+    private GameObject player;
     private int cardPriority = 0;
 
 
@@ -24,6 +25,7 @@ public class Card : MonoBehaviour
         deckManager = GameObject.FindWithTag("GameController");
         endTurnButton = GameObject.Find("EndTurnButton");
         turnManager = GameObject.Find("TurnManager");
+        player = GameObject.FindWithTag("Player");
         nameText.text = cardName.ToString();
         switch (cardName)
         {
@@ -62,6 +64,10 @@ public class Card : MonoBehaviour
 				if (deckManager.GetComponent<DeckManager>().GetComboColor() == CardColor.Yellow)
 				{
 					cardPriority += deckManager.GetComponent<DeckManager>().comboNumber;
+                    if (cardName == CardName.ComboBreaker)
+                    {
+                        cardPriority += 1000;
+                    }
 				}
 				break;
         }
@@ -69,6 +75,12 @@ public class Card : MonoBehaviour
         {
             GetComponent<Button>().interactable = false;
         }
+
+        if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frozen) && UnityEngine.Random.Range(0, 3) == 0)
+        {
+			GetComponent<Button>().interactable = false;
+		}
+
         if (cardName == CardName.ComboBreaker)
         {
             cardPriority = 999;

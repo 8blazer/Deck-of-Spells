@@ -13,6 +13,10 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject deckManager;
 	public void TakeDamage(int damage)
 	{
+		if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened) && damage > 0)
+		{
+			damage = (int)(damage * 1.5f);
+		}
 		health -= damage;
 		healthText.text = health.ToString();
 		if (health < 1)

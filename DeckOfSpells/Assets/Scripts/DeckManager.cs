@@ -24,6 +24,8 @@ public class DeckManager : MonoBehaviour
 	public CardColor comboDelayColor = CardColor.None;
 	[SerializeField] private Button endTurnButton;
 
+	private bool comboBroken = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,42 +33,45 @@ public class DeckManager : MonoBehaviour
 
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Landslide);
-		deck.Add(CardName.Landslide);
-		deck.Add(CardName.Landslide);
-		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Spikey);
 		deck.Add(CardName.Wall);
 		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Revivify);
 		deck.Add(CardName.Boost);
+		deck.Add(CardName.Cure);
+		deck.Add(CardName.Cure);
+		deck.Add(CardName.Cure);
 		deck.Add(CardName.Cure);
 		deck.Add(CardName.ComboBooster);
 		deck.Add(CardName.Frighten);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
+
+		deck.Add(CardName.Poison);
+		deck.Add(CardName.Poison);
 		deck.Add(CardName.Freeze);
 		deck.Add(CardName.Freeze);
 		deck.Add(CardName.ComboBreaker);
 		deck.Add(CardName.Boost);
 		deck.Add(CardName.Boost);
-		deck.Add(CardName.Boost);
-		deck.Add(CardName.Boost);
+		deck.Add(CardName.Lullaby);
+
 
 		ChooseCards();
 	}
 
     public void ChooseCards()
 	{
+		if (comboBroken)
+		{
+			comboBroken = false;
+			UpdateCombo(CardColor.None);
+		}
+
 		while (selectedCards.Count > 0)
 		{
 			discardDeck.Add(selectedCards[0].GetComponent<Card>().cardName);
@@ -119,6 +124,10 @@ public class DeckManager : MonoBehaviour
 		}
 	}
 
+	public void SetBroken()
+	{
+		comboBroken = true;
+	}
 	public void UpdateCombo(CardColor color)
 	{
 		if (color == comboColor)
