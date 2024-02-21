@@ -27,26 +27,20 @@ public class Enemy : MonoBehaviour
     {
         healthText.text = "105";
 
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Lightning);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-        deck.Add(CardName.Landslide);
+		//deck.Add(CardName.Fireball);
+		//deck.Add(CardName.Fireball);
+		//deck.Add(CardName.Lightning);
+		//deck.Add(CardName.Fireball);
+		//deck.Add(CardName.Fireball);
+		//deck.Add(CardName.Landslide);
 		//deck.Add(CardName.ComboBreaker);
 		//deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Freeze);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+
 
 		SelectCard();
 	}

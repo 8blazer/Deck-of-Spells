@@ -44,11 +44,10 @@ public class TurnManager : MonoBehaviour
 	}
 	public void PlayTurn()
     {
-        if (playerCard != CardName.None && enemyCard != CardName.None)
+		if (playerCard != CardName.None && enemyCard != CardName.None)
         {
 			if (playerPriority >= enemyPriority)
 			{
-				Debug.Log("Player first");
 				PlayerTurn();
 				if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
 				{
@@ -67,7 +66,6 @@ public class TurnManager : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log("Enemy first");
 				EnemyTurn();
 				if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
 				{
@@ -85,7 +83,7 @@ public class TurnManager : MonoBehaviour
 				}
 			}
 		}
-        else if (playerCard != CardName.None)
+        else if (playerCard == CardName.None)
         {
             EnemyTurn();
 			if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
@@ -107,7 +105,20 @@ public class TurnManager : MonoBehaviour
 		}
 
 		//Check to see if the game has ended
-		if (player.GetComponent<Player>().GetHealth() < 1)
+		if (player.GetComponent<Player>().GetHealth() < 1 && enemy.GetComponent<Enemy>().GetHealth() < 1)
+		{
+			if (playerCard == CardName.Reflect)
+			{
+				outcomeText.text = "Player Wins!";
+				deckManager.GameEnd();
+			}
+			else if (enemyCard == CardName.Reflect)
+			{
+				outcomeText.text = "Enemy Wins!";
+				deckManager.GameEnd();
+			}
+		}
+		else if (player.GetComponent<Player>().GetHealth() < 1)
 		{
 			outcomeText.text = "Enemy Wins!";
 			deckManager.GameEnd();
@@ -126,6 +137,8 @@ public class TurnManager : MonoBehaviour
 
     private void PlayerTurn()
     {
+		Debug.Log("Player: "+playerCard);
+		Debug.Log(deckManager.comboNumber);
         if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Asleep))
         {
             if (Random.Range(0, 4) > 0)
@@ -151,7 +164,27 @@ public class TurnManager : MonoBehaviour
                 {
 					intArray = new int[3] {3, 4, 5};
 				}
-				enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+				if (enemyCard == CardName.Reflect)
+				{
+					if (enemy.GetComponent<Enemy>().comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else
+					{
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+				}
+				else
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+				}
 				break;
             case CardName.Fireball:
 				if (deckManager.comboNumber == 1)
@@ -166,10 +199,50 @@ public class TurnManager : MonoBehaviour
 				{
 					intArray = new int[3] {5, 6, 7};
 				}
-				enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+				if (enemyCard == CardName.Reflect)
+				{
+					if (enemy.GetComponent<Enemy>().comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else
+					{
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+				}
+				else
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+				}
 				break;
 			case CardName.Landslide:
-                enemy.GetComponent<Enemy>().TakeDamage(3);
+				if (enemyCard == CardName.Reflect)
+				{
+					if (enemy.GetComponent<Enemy>().comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(3);
+						player.GetComponent<Player>().TakeDamage(3);
+					}
+					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(1);
+						player.GetComponent<Player>().TakeDamage(3);
+					}
+					else
+					{
+						player.GetComponent<Player>().TakeDamage(3);
+					}
+				}
+				else
+				{
+					enemy.GetComponent<Enemy>().TakeDamage(3);
+				}
 				break;
 			case CardName.Freeze:
 				enemy.GetComponent<StatusEffect>().AddStatus(Status.Frozen, deckManager.comboNumber);
@@ -207,7 +280,7 @@ public class TurnManager : MonoBehaviour
 				else
 				{
 					enemy.GetComponent<Enemy>().comboNumber = 0;
-					enemy.GetComponent<Enemy>().comboDelayColor = enemy.GetComponent <Enemy>().GetComboColor();
+					enemy.GetComponent<Enemy>().comboDelayColor = enemy.GetComponent<Enemy>().GetComboColor();
 					enemy.GetComponent<Enemy>().comboDelayTimer = 1;
 				}
 				break;
@@ -226,6 +299,8 @@ public class TurnManager : MonoBehaviour
 
     private void EnemyTurn()
     {
+		Debug.Log("Enemy: " + enemyCard);
+		Debug.Log(enemy.GetComponent<Enemy>().comboNumber);
 		if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Asleep))
 		{
 			if (Random.Range(0, 4) > 0)
@@ -251,7 +326,27 @@ public class TurnManager : MonoBehaviour
 				{
 					intArray = new int[3] { 3, 4, 5 };
 				}
-				player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+				if (playerCard == CardName.Reflect)
+				{
+					if (deckManager.comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else if (deckManager.comboNumber == 2)
+					{
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2);
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					}
+				}
+				else
+				{
+					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+				}
 				break;
 			case CardName.Fireball:
 				if (enemy.GetComponent<Enemy>().comboNumber == 1)
@@ -266,10 +361,50 @@ public class TurnManager : MonoBehaviour
 				{
 					intArray = new int[3] { 5, 6, 7 };
 				}
-				player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+				if (playerCard == CardName.Reflect)
+				{
+					if (deckManager.comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else if (deckManager.comboNumber == 2)
+					{
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2);
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					}
+					else
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					}
+				}
+				else
+				{
+					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+				}
 				break;
 			case CardName.Landslide:
-				player.GetComponent<Player>().TakeDamage(3);
+				if (playerCard == CardName.Reflect)
+				{
+					if (deckManager.comboNumber == 1)
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(3);
+						player.GetComponent<Player>().TakeDamage(3);
+					}
+					else if (deckManager.comboNumber == 2)
+					{
+						player.GetComponent<Player>().TakeDamage(1);
+						enemy.GetComponent<Enemy>().TakeDamage(3);
+					}
+					else
+					{
+						enemy.GetComponent<Enemy>().TakeDamage(3);
+					}
+				}
+				else
+				{
+					player.GetComponent<Player>().TakeDamage(3);
+				}
 				break;
 			case CardName.Freeze:
 				player.GetComponent<StatusEffect>().AddStatus(Status.Frozen, enemy.GetComponent<Enemy>().comboNumber);

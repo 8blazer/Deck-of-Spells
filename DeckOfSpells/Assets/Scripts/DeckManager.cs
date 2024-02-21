@@ -47,7 +47,12 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Cure);
 		deck.Add(CardName.Cure);
 		deck.Add(CardName.Cure);
-		deck.Add(CardName.Cure);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
 		deck.Add(CardName.ComboBooster);
 		deck.Add(CardName.Frighten);
 
