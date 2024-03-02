@@ -13,7 +13,11 @@ public class StatusEffect : MonoBehaviour
 
 	private Dictionary<Status, int> statusList = new Dictionary<Status, int>();
 	private List<GameObject> effectObjects = new List<GameObject>();
-	[SerializeField] private GameObject effectPrefab;
+	[SerializeField] private Sprite frozenSprite;
+	[SerializeField] private Sprite frightenedSprite;
+	[SerializeField] private Sprite asleepSprite;
+	[SerializeField] private Sprite poisonedSprite;
+	[SerializeField] private GameObject statusPrefab;
 
 	void Start()
     {
@@ -35,13 +39,37 @@ public class StatusEffect : MonoBehaviour
 	public void SetStatus(Status s)
 	{
 		status = s;
+		if (s == Status.Asleep)
+		{
+			GetComponent<SpriteRenderer>().sprite = asleepSprite;
+		}
+		else if (s == Status.Frozen)
+		{
+			GetComponent<SpriteRenderer>().sprite = frozenSprite;
+		}
+		else if (s == Status.Frightened)
+		{
+			GetComponent<SpriteRenderer>().sprite = frightenedSprite;
+		}
+		else
+		{
+			GetComponent<SpriteRenderer>().sprite = poisonedSprite;
+		}
 	}
 
 	public void AddStatus(Status s, int effectTime)
 	{
+		if (GetComponent<Player>() != null)
+		{
+			foreach (GameObject minion in GetComponent<Player>().GetMinionList())
+			{
+				minion.GetComponent<StatusEffect>().AddStatus(s, effectTime);
+			}
+		}
+
 		if (!statusList.ContainsKey(s) || statusList[s] < 0)
 		{
-			GameObject effect = Instantiate(effectPrefab, new Vector3(1000, 0, 0), Quaternion.identity);
+			GameObject effect = Instantiate(statusPrefab, new Vector3(1000, 0, 0), Quaternion.identity);
 			effect.GetComponent<StatusEffect>().SetStatus(s);
 			effectObjects.Add(effect);
 			statusList.Add(s, effectTime);
@@ -55,6 +83,14 @@ public class StatusEffect : MonoBehaviour
 
 	public void UpdateStatus()
 	{
+		if (GetComponent<Player>() != null)
+		{
+			foreach (GameObject minion in GetComponent<Player>().GetMinionList())
+			{
+				minion.GetComponent<StatusEffect>().UpdateStatus();
+			}
+		}
+
 		List<Status> updateList = new List<Status>();
 		foreach (KeyValuePair<Status, int> entry in statusList)
 		{
@@ -93,7 +129,7 @@ public class StatusEffect : MonoBehaviour
 	{
 		for (int i = 0; i < effectObjects.Count; i++)
 		{
-			effectObjects[i].transform.position = this.transform.position + new Vector3(i * 100, 100, 0);
+			effectObjects[i].transform.position = this.transform.position + new Vector3(i * 2, 2, 0);
 		}
 	}
 

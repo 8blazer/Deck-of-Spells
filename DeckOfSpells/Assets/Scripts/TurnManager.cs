@@ -17,6 +17,8 @@ public class TurnManager : MonoBehaviour
 
 	[SerializeField] private TMP_Text outcomeText;
 
+	[SerializeField] private GameObject minionPrefab;
+
 
 
 	void Start()
@@ -49,36 +51,20 @@ public class TurnManager : MonoBehaviour
 			if (playerPriority >= enemyPriority)
 			{
 				PlayerTurn();
-				if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-				{
-					player.GetComponent<Player>().TakeDamage(3);
-				}
 				player.GetComponent<StatusEffect>().UpdateStatus();
 				if (enemy.GetComponent<Enemy>().GetHealth() > 0)
 				{
 					EnemyTurn();
-					if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-					{
-						enemy.GetComponent<Enemy>().TakeDamage(3);
-					}
 					enemy.GetComponent<StatusEffect>().UpdateStatus();
 				}
 			}
 			else
 			{
 				EnemyTurn();
-				if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-				{
-					enemy.GetComponent<Enemy>().TakeDamage(3);
-				}
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
 				if (player.GetComponent<Player>().GetHealth() > 0)
 				{
 					PlayerTurn();
-					if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-					{
-						player.GetComponent<Player>().TakeDamage(3);
-					}
 					player.GetComponent<StatusEffect>().UpdateStatus();
 				}
 			}
@@ -86,20 +72,12 @@ public class TurnManager : MonoBehaviour
         else if (playerCard == CardName.None)
         {
             EnemyTurn();
-			if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-			{
-				enemy.GetComponent<Enemy>().TakeDamage(3);
-			}
 			enemy.GetComponent<StatusEffect>().UpdateStatus();
 			player.GetComponent<StatusEffect>().UpdateStatus();
 		}
 		else
 		{
 			PlayerTurn();
-			if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
-			{
-				player.GetComponent<Player>().TakeDamage(3);
-			}
 			enemy.GetComponent<StatusEffect>().UpdateStatus();
 			player.GetComponent<StatusEffect>().UpdateStatus();
 		}
@@ -133,12 +111,16 @@ public class TurnManager : MonoBehaviour
 			enemy.GetComponent<Enemy>().SelectCard();
 			deckManager.ChooseCards();
 		}
+		playerCard = CardName.None;
     }
 
     private void PlayerTurn()
     {
-		Debug.Log("Player: "+playerCard);
-		Debug.Log(deckManager.comboNumber);
+		if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
+		{
+			player.GetComponent<Player>().TakeDamage(2, true);
+		}
+
         if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Asleep))
         {
             if (Random.Range(0, 4) > 0)
@@ -168,22 +150,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (enemy.GetComponent<Enemy>().comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2);
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2, false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else
 					{
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 				}
 				else
 				{
-					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 				}
 				break;
             case CardName.Fireball:
@@ -203,22 +185,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (enemy.GetComponent<Enemy>().comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2);
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray) / 2, false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else
 					{
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 				}
 				else
 				{
-					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 				}
 				break;
 			case CardName.Landslide:
@@ -226,22 +208,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (enemy.GetComponent<Enemy>().comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(3);
-						player.GetComponent<Player>().TakeDamage(3);
+						enemy.GetComponent<Enemy>().TakeDamage(3, false);
+						player.GetComponent<Player>().TakeDamage(3, false);
 					}
 					else if (enemy.GetComponent<Enemy>().comboNumber == 2)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(1);
-						player.GetComponent<Player>().TakeDamage(3);
+						enemy.GetComponent<Enemy>().TakeDamage(1, false);
+						player.GetComponent<Player>().TakeDamage(3, false);
 					}
 					else
 					{
-						player.GetComponent<Player>().TakeDamage(3);
+						player.GetComponent<Player>().TakeDamage(3, false);
 					}
 				}
 				else
 				{
-					enemy.GetComponent<Enemy>().TakeDamage(3);
+					enemy.GetComponent<Enemy>().TakeDamage(3, false);
 				}
 				break;
 			case CardName.Freeze:
@@ -285,7 +267,7 @@ public class TurnManager : MonoBehaviour
 				}
 				break;
 			case CardName.Revivify:
-				player.GetComponent<Player>().TakeDamage((deckManager.comboNumber + 1) * -1);
+				player.GetComponent<Player>().TakeDamage((deckManager.comboNumber + 1) * -1, false);
 				break;
 			case CardName.Cure:
 				player.GetComponent<StatusEffect>().UpdateStatus();
@@ -293,14 +275,69 @@ public class TurnManager : MonoBehaviour
 				player.GetComponent<StatusEffect>().UpdateStatus();
 				player.GetComponent<StatusEffect>().UpdateStatus();
 				player.GetComponent<StatusEffect>().UpdateStatus();
+				if (deckManager.comboNumber > 1)
+				{
+					player.GetComponent<Player>().CureMinions();
+				}
+				break;
+			case CardName.Tree:
+				GameObject minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				if (deckManager.comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 2, 0);
+				}
+				else if (deckManager.comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 3, 1);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 5, 1);
+				}
+				player.GetComponent<Player>().AddMinion(minion);
+				break;
+			case CardName.Spikey:
+				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				if (deckManager.comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 1, 1);
+				}
+				else if (deckManager.comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 2, 2);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 3, 3);
+				}
+				player.GetComponent<Player>().AddMinion(minion);
+				break;
+			case CardName.Wall:
+				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				if (deckManager.comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 3, 0);
+				}
+				else if (deckManager.comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 5, 0);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 7, 0);
+				}
+				player.GetComponent<Player>().AddMinion(minion);
 				break;
 		}
-    }
+		enemy.GetComponent<Enemy>().TakeDamage(player.GetComponent<Player>().MinionTurn(), false);
+	}
 
     private void EnemyTurn()
     {
-		Debug.Log("Enemy: " + enemyCard);
-		Debug.Log(enemy.GetComponent<Enemy>().comboNumber);
+		if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Poisoned))
+		{
+			enemy.GetComponent<Enemy>().TakeDamage(2, true);
+		}
 		if (enemy.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Asleep))
 		{
 			if (Random.Range(0, 4) > 0)
@@ -330,22 +367,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (deckManager.comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else if (deckManager.comboNumber == 2)
 					{
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2);
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2, false);
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 				}
 				else
 				{
-					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 				}
 				break;
 			case CardName.Fireball:
@@ -365,22 +402,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (deckManager.comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else if (deckManager.comboNumber == 2)
 					{
-						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2);
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray) / 2, false);
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 					else
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray));
+						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
 				}
 				else
 				{
-					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray));
+					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 				}
 				break;
 			case CardName.Landslide:
@@ -388,22 +425,22 @@ public class TurnManager : MonoBehaviour
 				{
 					if (deckManager.comboNumber == 1)
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(3);
-						player.GetComponent<Player>().TakeDamage(3);
+						enemy.GetComponent<Enemy>().TakeDamage(3, false);
+						player.GetComponent<Player>().TakeDamage(3, false);
 					}
 					else if (deckManager.comboNumber == 2)
 					{
-						player.GetComponent<Player>().TakeDamage(1);
-						enemy.GetComponent<Enemy>().TakeDamage(3);
+						player.GetComponent<Player>().TakeDamage(1, false);
+						enemy.GetComponent<Enemy>().TakeDamage(3, false);
 					}
 					else
 					{
-						enemy.GetComponent<Enemy>().TakeDamage(3);
+						enemy.GetComponent<Enemy>().TakeDamage(3, false);
 					}
 				}
 				else
 				{
-					player.GetComponent<Player>().TakeDamage(3);
+					player.GetComponent<Player>().TakeDamage(3, false);
 				}
 				break;
 			case CardName.Freeze:
@@ -447,7 +484,7 @@ public class TurnManager : MonoBehaviour
 				}
 				break;
 			case CardName.Revivify:
-				enemy.GetComponent<Enemy>().TakeDamage((enemy.GetComponent<Enemy>().comboNumber + 1) * -1);
+				enemy.GetComponent<Enemy>().TakeDamage((enemy.GetComponent<Enemy>().comboNumber + 1) * -1, false);
 				break;
 			case CardName.Cure:
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
@@ -455,8 +492,62 @@ public class TurnManager : MonoBehaviour
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
+				if (enemy.GetComponent<Enemy>().comboNumber > 1)
+				{
+					enemy.GetComponent<Enemy>().CureMinions();
+				}
+				break;
+			case CardName.Tree:
+				GameObject minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				if (enemy.GetComponent<Enemy>().comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 2, 0);
+				}
+				else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 3, 1);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 5, 1);
+				}
+				enemy.GetComponent<Enemy>().AddMinion(minion);
+				break;
+			case CardName.Spikey:
+				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				if (enemy.GetComponent<Enemy>().comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 1, 1);
+				}
+				else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 2, 2);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 3, 3);
+				}
+				enemy.GetComponent<Enemy>().AddMinion(minion);
+				break;
+			case CardName.Wall:
+				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				if (enemy.GetComponent<Enemy>().comboNumber == 1)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 3, 0);
+				}
+				else if (enemy.GetComponent<Enemy>().comboNumber == 2)
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 5, 0);
+				}
+				else
+				{
+					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 7, 0);
+				}
+				enemy.GetComponent<Enemy>().AddMinion(minion);
 				break;
 		}
+
+		player.GetComponent<Player>().TakeDamage(enemy.GetComponent<Enemy>().MinionTurn(), false);
 	}
 
     private int DamageRandomizer(int[] intArray)

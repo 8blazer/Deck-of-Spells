@@ -22,14 +22,20 @@ public class Enemy : MonoBehaviour
 	public CardColor comboDelayColor = CardColor.None;
 	private bool comboBroken = false;
 
+	private List<GameObject> minions = new List<GameObject>();
+
 	// Start is called before the first frame update
 	void Start()
     {
         healthText.text = "105";
 
-		//deck.Add(CardName.Fireball);
-		//deck.Add(CardName.Fireball);
-		//deck.Add(CardName.Lightning);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Lightning);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Lullaby);
 		//deck.Add(CardName.Fireball);
 		//deck.Add(CardName.Fireball);
 		//deck.Add(CardName.Landslide);
@@ -37,9 +43,9 @@ public class Enemy : MonoBehaviour
 		//deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
+		//deck.Add(CardName.Reflect);
+		//deck.Add(CardName.Reflect);
+		//deck.Add(CardName.Reflect);
 
 
 		SelectCard();
@@ -102,9 +108,9 @@ public class Enemy : MonoBehaviour
 		}
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool poison)
     {
-		if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened) && damage > 0)
+		if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened) && damage > 0 && !poison)
 		{
 			damage = (int)(damage * 1.5f);
 		}
@@ -192,5 +198,37 @@ public class Enemy : MonoBehaviour
 	public CardColor GetComboColor()
 	{
 		return comboColor;
+	}
+
+	public int MinionTurn()
+	{
+		int damage = 0;
+
+		foreach (GameObject minion in minions)
+		{
+			damage += minion.GetComponent<Minions>().GetDamage();
+		}
+
+		return damage;
+	}
+
+	public void AddMinion(GameObject minion)
+	{
+		foreach (GameObject min in minions)
+		{
+			min.transform.position += new Vector3(2, 0, 0);
+		}
+		minions.Add(minion);
+	}
+
+	public void CureMinions()
+	{
+		foreach (GameObject minion in minions)
+		{
+			minion.GetComponent<StatusEffect>().UpdateStatus();
+			minion.GetComponent<StatusEffect>().UpdateStatus();
+			minion.GetComponent<StatusEffect>().UpdateStatus();
+			minion.GetComponent<StatusEffect>().UpdateStatus();
+		}
 	}
 }

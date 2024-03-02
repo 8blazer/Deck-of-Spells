@@ -31,39 +31,15 @@ public class DeckManager : MonoBehaviour
     void Start()
     {
 
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Landslide);
-		deck.Add(CardName.Lightning);
-		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Tree);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Revivify);
-		deck.Add(CardName.Revivify);
-		deck.Add(CardName.Revivify);
-		deck.Add(CardName.Revivify);
-		deck.Add(CardName.Boost);
-		deck.Add(CardName.Cure);
-		deck.Add(CardName.Cure);
-		deck.Add(CardName.Cure);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.ComboBooster);
-		deck.Add(CardName.Frighten);
-
-		deck.Add(CardName.Poison);
-		deck.Add(CardName.Poison);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.ComboBreaker);
-		deck.Add(CardName.Boost);
-		deck.Add(CardName.Boost);
-		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Tree);
 
 
 		ChooseCards();
