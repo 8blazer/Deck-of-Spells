@@ -97,4 +97,12 @@ public class Player : MonoBehaviour
 		return damage;
 	}
 
+	public void ChangeMinionDamage(int damageChange)
+	{
+		foreach (GameObject minion in minions)
+		{
+			minion.GetComponent<Minions>().ChangeDamage(damageChange);
+		}
+	}
+
 }

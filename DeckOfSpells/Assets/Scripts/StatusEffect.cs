@@ -129,7 +129,7 @@ public class StatusEffect : MonoBehaviour
 	{
 		for (int i = 0; i < effectObjects.Count; i++)
 		{
-			effectObjects[i].transform.position = this.transform.position + new Vector3(i * 2, 2, 0);
+			effectObjects[i].transform.position = this.transform.position + new Vector3(i, 2, 0);
 		}
 	}
 

@@ -74,6 +74,11 @@ public class Minions : MonoBehaviour
 
     public int GetHealth() { return health; }
 
+    public void ChangeDamage(int damageChange)
+    {
+        damage += damageChange;
+    }
+
 }
 
 public enum Minion

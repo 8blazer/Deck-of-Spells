@@ -7,12 +7,15 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
     private int health = 105;
+	private int startHealth;
 
 	List<CardName> deck = new List<CardName>();
 	List<CardName> discardDeck = new List<CardName>();
 	List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
 	[SerializeField] private TMP_Text cardSelectedText;
+	[SerializeField] private GameObject player;
+	[SerializeField] private GameObject deckManager;
 	private int cardPriority = 0;
 
 	private CardColor comboColor = CardColor.None;
@@ -24,27 +27,41 @@ public class Enemy : MonoBehaviour
 
 	private List<GameObject> minions = new List<GameObject>();
 
+	[SerializeField] private float redFavor = 1;
+	[SerializeField] private float greenFavor = 1;
+	[SerializeField] private float blueFavor = 1;
+	[SerializeField] private float yellowFavor = 1;
+
 	// Start is called before the first frame update
 	void Start()
     {
         healthText.text = "105";
+		startHealth = health;
 
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Lullaby);
 		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
 		//deck.Add(CardName.Fireball);
-		//deck.Add(CardName.Fireball);
-		//deck.Add(CardName.Landslide);
-		//deck.Add(CardName.ComboBreaker);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.ComboBreaker);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Reflect);
-		//deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Tree);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
 		//deck.Add(CardName.Reflect);
 
 
@@ -78,7 +95,7 @@ public class Enemy : MonoBehaviour
 
 		if (selectedCards.Count > 0)
 		{
-			CardName selectedCard = selectedCards[0];
+			CardName selectedCard = SelectCardAI();
 			cardSelectedText.text = selectedCard.ToString();
 			switch (selectedCard)
 			{
@@ -87,6 +104,23 @@ public class Enemy : MonoBehaviour
 				case CardName.Landslide:
 					cardPriority = 100 + comboNumber;
 					UpdateCombo(CardColor.Red);
+					break;
+				case CardName.Wall:
+				case CardName.Spikey:
+				case CardName.Tree:
+					cardPriority = 75 + comboNumber;
+					UpdateCombo(CardColor.Blue);
+					break;
+				case CardName.Poison:
+				case CardName.Lullaby:
+				case CardName.Freeze:
+				case CardName.Frighten:
+					cardPriority = 25 + comboNumber;
+					UpdateCombo(CardColor.Yellow);
+					break;
+				case CardName.ComboBreaker:
+					cardPriority += 1000;
+					UpdateCombo(CardColor.Yellow);
 					break;
 				default:
 					cardPriority = 50 + comboNumber;
@@ -107,6 +141,105 @@ public class Enemy : MonoBehaviour
 			turnManager.GetComponent<TurnManager>().SetEnemyCard(CardName.None, 0);
 		}
     }
+
+	private CardName SelectCardAI()
+	{
+		float[] probabilities = new float[3];
+
+		for (int i = 0; i < selectedCards.Count; i++)
+		{
+			switch (selectedCards[i])
+			{
+				case CardName.Fireball:
+				case CardName.Lightning:
+				case CardName.Landslide:
+					probabilities[i] = redFavor;
+					if (comboColor == CardColor.Red)
+					{
+						probabilities[i] *= comboNumber;
+					}
+					if (player.GetComponent<Player>().GetHealth() < 6)
+					{
+						probabilities[i] += 10;
+					}
+					break;
+				case CardName.Spikey:
+				case CardName.Tree:
+				case CardName.Wall:
+					probabilities[i] = blueFavor;
+					if (comboColor == CardColor.Blue)
+					{
+						probabilities[i] *= comboNumber;
+					}
+					probabilities[i] *= (health / startHealth);
+					break;
+				case CardName.Revivify:
+				case CardName.Boost:
+				case CardName.ComboBooster:
+				case CardName.Cure:
+				case CardName.Reflect:
+					probabilities[i] = greenFavor;
+					if (comboColor == CardColor.Green)
+					{
+						probabilities[i] *= comboNumber;
+					}
+					if (selectedCards[i] == CardName.Boost)
+					{
+						probabilities[i] *= minions.Count;
+					}
+					else if (selectedCards[i] == CardName.Cure && GetComponent<StatusEffect>().GetStatusList().Count == 0)
+					{
+						probabilities[i] = 0;
+					}
+					else if (selectedCards[i] == CardName.ComboBooster && comboNumber >= 2)
+					{
+						probabilities[i] = 0;
+					}
+					break;
+				case CardName.Frighten:
+				case CardName.Lullaby:
+				case CardName.Poison:
+				case CardName.Freeze:
+					probabilities[i] = yellowFavor;
+					if (comboColor == CardColor.Yellow)
+					{
+						probabilities[i] *= comboNumber;
+					}
+					break;
+			}
+		}
+
+		if (selectedCards.Count == 0)
+		{
+			return CardName.None;
+		}
+		else if (selectedCards.Count == 1)
+		{
+			return selectedCards[0];
+		}
+		else if (selectedCards.Count == 2)
+		{
+			if (probabilities[0] > probabilities[1])
+			{
+				return selectedCards[0];
+			}
+			return selectedCards[1];
+		}
+
+		float rnd = Random.Range(0, redFavor + blueFavor + greenFavor + yellowFavor);
+        if (rnd > probabilities[1] + probabilities[2])
+        {
+			return selectedCards[0];
+        }
+		else if (probabilities[1] > probabilities[2])
+		{
+			return selectedCards[1];
+		}
+		else
+		{
+			return selectedCards[2];
+		}
+	}
 
     public void TakeDamage(int damage, bool poison)
     {
@@ -131,6 +264,13 @@ public class Enemy : MonoBehaviour
     {
         return health;
     }
+	public void ChangeMinionDamage(int damageChange)
+	{
+		foreach (GameObject minion in minions)
+		{
+			minion.GetComponent<Minions>().ChangeDamage(damageChange);
+		}
+	}
 
 	public void UpdateCombo(CardColor color)
 	{

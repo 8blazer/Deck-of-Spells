@@ -328,6 +328,9 @@ public class TurnManager : MonoBehaviour
 				}
 				player.GetComponent<Player>().AddMinion(minion);
 				break;
+			case CardName.Boost:
+				player.GetComponent<Player>().ChangeMinionDamage(deckManager.comboNumber);
+				break;
 		}
 		enemy.GetComponent<Enemy>().TakeDamage(player.GetComponent<Player>().MinionTurn(), false);
 	}
@@ -544,6 +547,9 @@ public class TurnManager : MonoBehaviour
 					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 7, 0);
 				}
 				enemy.GetComponent<Enemy>().AddMinion(minion);
+				break;
+			case CardName.Boost:
+				enemy.GetComponent<Enemy>().ChangeMinionDamage(enemy.GetComponent<Enemy>().comboNumber);
 				break;
 		}
 
