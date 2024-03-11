@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
 				damage = minions[i].GetComponent<Minions>().TakeDamage(damage, false);
 				if (minions[i].GetComponent<Minions>().GetHealth() <= 0)
 				{
-					Destroy(minions[i]);
+					//Destroy(minions[i]);
 					minions.RemoveAt(i);
 					minionCount--;
 				}

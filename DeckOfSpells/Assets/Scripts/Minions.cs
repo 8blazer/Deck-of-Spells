@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Minions : MonoBehaviour
 {
+    private Minion minion;
     private int health;
     private int damage;
     [SerializeField] private RuntimeAnimatorController spikeyAnimator;
@@ -15,6 +16,7 @@ public class Minions : MonoBehaviour
     {
         health = hp;
         damage = dmg;
+        minion = minionType;
         if (minionType == Minion.Tree)
         {
             GetComponent<Animator>().runtimeAnimatorController = treeAnimator;
@@ -28,8 +30,22 @@ public class Minions : MonoBehaviour
 			GetComponent<Animator>().runtimeAnimatorController = spikeyAnimator;
 		}
 	}
+
+	private void Update()
+	{
+		if (GetComponent<Animator>().GetBool("IsHurt") && !GetComponent<Animator>().IsInTransition(0))
+        {
+            GetComponent<Animator>().SetBool("IsHurt", false);
+        }
+		if (GetComponent<Animator>().GetBool("IsDead") && !GetComponent<Animator>().IsInTransition(0))
+		{
+			Destroy(gameObject);
+		}
+	}
 	public int TakeDamage(int dmg, bool poison)
     {
+        GetComponent<Animator>().SetBool("IsHurt", true);
+
         if (poison)
         {
             health -= dmg;
@@ -42,11 +58,15 @@ public class Minions : MonoBehaviour
 		health -= dmg;
 		if (health < 1)
 		{
+            GetComponent<Animator>().SetBool("IsDead", true);
             GetComponent<StatusEffect>().UpdateStatus();
 			GetComponent<StatusEffect>().UpdateStatus();
 			GetComponent<StatusEffect>().UpdateStatus();
 			GetComponent<StatusEffect>().UpdateStatus();
-			return health * -1;
+            if (minion != Minion.Wall)
+            {
+				return health * -1;
+			}
 		}
         return 0;
 	}

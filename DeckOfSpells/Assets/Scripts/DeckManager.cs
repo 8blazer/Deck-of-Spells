@@ -33,6 +33,14 @@ public class DeckManager : MonoBehaviour
 
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Wall);
 		deck.Add(CardName.Spikey);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
@@ -52,16 +60,6 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Poison);
 		deck.Add(CardName.Frighten);
 		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Poison);
-		deck.Add(CardName.Frighten);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Poison);
-		deck.Add(CardName.Frighten);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Poison);
 
 
 		ChooseCards();
