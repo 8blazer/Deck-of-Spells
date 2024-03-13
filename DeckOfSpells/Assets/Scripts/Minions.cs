@@ -8,6 +8,7 @@ public class Minions : MonoBehaviour
     private Minion minion;
     private int health;
     private int damage;
+    private float timer;
     [SerializeField] private RuntimeAnimatorController spikeyAnimator;
     [SerializeField] private RuntimeAnimatorController treeAnimator;
     [SerializeField] private RuntimeAnimatorController wallAnimator;
@@ -33,14 +34,19 @@ public class Minions : MonoBehaviour
 
 	private void Update()
 	{
-		if (GetComponent<Animator>().GetBool("IsHurt") && !GetComponent<Animator>().IsInTransition(0))
+        if (GetComponent<Animator>().GetBool("IsHurt") || GetComponent<Animator>().GetBool("IsDead"))
         {
-            GetComponent<Animator>().SetBool("IsHurt", false);
+            timer += Time.deltaTime;
+            if (timer > .3f && !GetComponent<Animator>().IsInTransition(0) && GetComponent<Animator>().GetBool("IsHurt"))
+            {
+				GetComponent<Animator>().SetBool("IsHurt", false);
+                timer = 0;
+			}
+            else if (timer > .3f && GetComponent<Animator>().GetBool("IsDead") && !GetComponent<Animator>().IsInTransition(0))
+            {
+                Destroy(gameObject);
+            }
         }
-		if (GetComponent<Animator>().GetBool("IsDead") && !GetComponent<Animator>().IsInTransition(0))
-		{
-			Destroy(gameObject);
-		}
 	}
 	public int TakeDamage(int dmg, bool poison)
     {

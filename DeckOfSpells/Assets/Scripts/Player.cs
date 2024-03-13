@@ -33,8 +33,10 @@ public class Player : MonoBehaviour
 		{
 			for (int i = 0; i < minionCount; i++)
 			{
-				Debug.Log("Minion dmg");
-				damage = minions[i].GetComponent<Minions>().TakeDamage(damage, false);
+				if (damage > 0)
+				{
+					damage = minions[i].GetComponent<Minions>().TakeDamage(damage, false);
+				}
 				if (minions[i].GetComponent<Minions>().GetHealth() <= 0)
 				{
 					//Destroy(minions[i]);
