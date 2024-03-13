@@ -31,10 +31,10 @@ public class EndTurnButton : MonoBehaviour
         else
         {
             deckManager.GetComponent<DeckManager>().UpdateCombo(CardColor.None);
-            turnManager.GetComponent<TurnManager>().PlayTurn();
-
+            turnManager.GetComponent<TurnManager>().SetPlayerCard(CardName.None, 0);
         }
-    }
+        deckManager.GetComponent<DeckManager>().DeleteCards();
+	}
 
     public void setCard(Card card)
     {

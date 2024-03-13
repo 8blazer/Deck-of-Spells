@@ -36,7 +36,7 @@ public class TurnManager : MonoBehaviour
     {
         playerCard = cardName;
         playerPriority = priority;
-        PlayTurn();
+        StartCoroutine(PlayTurn());
     }
 
 	public void SetEnemyCard(CardName cardName, int priority)
@@ -44,7 +44,7 @@ public class TurnManager : MonoBehaviour
 		enemyCard = cardName;
         enemyPriority = priority;
 	}
-	public void PlayTurn()
+	IEnumerator PlayTurn()
     {
 		if (playerCard != CardName.None && enemyCard != CardName.None)
         {
@@ -52,6 +52,7 @@ public class TurnManager : MonoBehaviour
 			{
 				PlayerTurn();
 				player.GetComponent<StatusEffect>().UpdateStatus();
+				yield return new WaitForSeconds(.5f);
 				if (enemy.GetComponent<Enemy>().GetHealth() > 0)
 				{
 					EnemyTurn();
@@ -62,6 +63,7 @@ public class TurnManager : MonoBehaviour
 			{
 				EnemyTurn();
 				enemy.GetComponent<StatusEffect>().UpdateStatus();
+				yield return new WaitForSeconds(.5f);
 				if (player.GetComponent<Player>().GetHealth() > 0)
 				{
 					PlayerTurn();
@@ -73,12 +75,14 @@ public class TurnManager : MonoBehaviour
         {
             EnemyTurn();
 			enemy.GetComponent<StatusEffect>().UpdateStatus();
+			yield return new WaitForSeconds(.5f);
 			player.GetComponent<StatusEffect>().UpdateStatus();
 		}
 		else
 		{
 			PlayerTurn();
 			enemy.GetComponent<StatusEffect>().UpdateStatus();
+			yield return new WaitForSeconds(.5f);
 			player.GetComponent<StatusEffect>().UpdateStatus();
 		}
 

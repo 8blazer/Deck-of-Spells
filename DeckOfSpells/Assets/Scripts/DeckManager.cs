@@ -125,6 +125,16 @@ public class DeckManager : MonoBehaviour
 		}
 	}
 
+	public void DeleteCards()
+	{
+		while (selectedCards.Count > 0)
+		{
+			discardDeck.Add(selectedCards[0].GetComponent<Card>().cardName);
+			Destroy(selectedCards[0]);
+			selectedCards.RemoveAt(0);
+		}
+	}
+
 	public void SetBroken()
 	{
 		comboBroken = true;
