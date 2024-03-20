@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float movementDropoff;
+	[SerializeField] private Camera menuCamera;
+	private bool canMove = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,32 +17,54 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 velocity = new Vector2(0,0);
-		if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-		{
-			velocity += new Vector2(-moveSpeed, 0);
+        if (canMove)
+        {
+			Vector2 velocity = new Vector2(0, 0);
+			if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+			{
+				velocity += new Vector2(-moveSpeed, 0);
+			}
+			else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+			{
+				velocity += new Vector2(moveSpeed, 0);
+			}
+			if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+			{
+				velocity += new Vector2(0, moveSpeed);
+			}
+			else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+			{
+				velocity += new Vector2(0, -moveSpeed);
+			}
+			if (velocity.x == 0 && velocity.y == 0)
+			{
+				GetComponent<Rigidbody2D>().velocity *= movementDropoff;
+			}
+			else
+			{
+				GetComponent<Rigidbody2D>().velocity = velocity;
+			}
 		}
-		else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-		{
-			velocity += new Vector2(moveSpeed, 0);
-		}
-		if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-		{
-			velocity += new Vector2(0, moveSpeed);
-		}
-		else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-		{
-			velocity += new Vector2(0, -moveSpeed);
-		}
-		if (velocity.x == 0 && velocity.y == 0)
-		{
-			GetComponent<Rigidbody2D>().velocity *= movementDropoff;
-		}
+
 		else
 		{
-			GetComponent<Rigidbody2D>().velocity = velocity;
+			GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 		}
 
 		GetComponent<Rigidbody2D>().velocity.Normalize();
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			if (menuCamera.enabled)
+			{
+				menuCamera.enabled = false;
+				canMove = true;
+			}
+			else
+			{
+				canMove = false;
+				menuCamera.enabled = true;
+			}
+		}
 	}
 }
