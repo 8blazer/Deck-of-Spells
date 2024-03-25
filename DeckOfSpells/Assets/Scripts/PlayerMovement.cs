@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float movementDropoff;
 	[SerializeField] private Camera menuCamera;
 	private bool canMove = true;
+	public int health;
+	public int maxHealth;
     // Start is called before the first frame update
     void Start()
     {
@@ -66,5 +68,19 @@ public class PlayerMovement : MonoBehaviour
 				menuCamera.enabled = true;
 			}
 		}
+	}
+
+	public void SaveData()
+	{
+		SaveSystem.SaveData(this.gameObject);
+	}
+
+	public void LoadData()
+	{
+		SaveData data = SaveSystem.LoadData();
+
+		health = data.health;
+		maxHealth = data.maxHealth;
+		transform.position = new Vector3(data.position[0], data.position[1], 0);
 	}
 }

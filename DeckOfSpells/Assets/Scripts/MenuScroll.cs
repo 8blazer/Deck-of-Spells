@@ -6,6 +6,9 @@ public class MenuScroll : MonoBehaviour
 {
     [SerializeField] private float minY;
     [SerializeField] private float maxY;
+    private int currentY = 0;
+
+    [SerializeField] private bool leftSide;
 
 
     // Start is called before the first frame update
@@ -17,13 +20,31 @@ public class MenuScroll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0 && transform.position.y < maxY)
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && currentY < maxY)
         {
-            transform.position += new Vector3(0, 1f, 0);
+            if (leftSide && Input.mousePosition.x < Screen.width / 2)
+            {
+				transform.position += new Vector3(0, 1f, 0);
+                currentY++;
+			}
+            else if (!leftSide && Input.mousePosition.x > Screen.width / 2)
+            {
+				transform.position += new Vector3(0, 1f, 0);
+				currentY++;
+			}
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && transform.position.y > minY)
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0 && currentY > minY)
         {
-			transform.position += new Vector3(0, -1f, 0);
+			if (leftSide && Input.mousePosition.x < Screen.width / 2)
+            {
+				transform.position += new Vector3(0, -1f, 0);
+				currentY--;
+			}
+			else if (!leftSide && Input.mousePosition.x > Screen.width / 2)
+            {
+				transform.position += new Vector3(0, -1f, 0);
+				currentY--;
+			}
 		}
-    }
+	}
 }
