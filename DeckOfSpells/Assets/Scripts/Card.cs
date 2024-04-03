@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using static UnityEngine.GraphicsBuffer;
 
 public class Card : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class Card : MonoBehaviour
 	[SerializeField] private Sprite poisonCardSprite;
 	[SerializeField] private Sprite lullabyCardSprite;
 	[SerializeField] private Sprite comboBreakerCardSprite;
+	[SerializeField] private GameObject frozenCardEffect;
 
 	// Start is called before the first frame update
 	void Start()
@@ -155,6 +157,13 @@ public class Card : MonoBehaviour
         if (player.GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frozen) && UnityEngine.Random.Range(0, 3) == 0)
         {
 			GetComponent<Button>().interactable = false;
+			//GameObject freezeCard = Instantiate(frozenCardEffect, transform.position, Quaternion.identity);
+			Vector3 canvasPosition = Camera.main.WorldToScreenPoint(GetComponent<RectTransform>().TransformPoint(transform.position));
+			canvasPosition = new Vector3(canvasPosition.x / GetComponent<RectTransform>().sizeDelta.x, canvasPosition.y / GetComponent<RectTransform>().sizeDelta.y, 0);
+
+			GameObject freezeCard = Instantiate(frozenCardEffect, transform.position, Quaternion.identity);
+			freezeCard.transform.SetParent(transform, true);
+			freezeCard.transform.position += new Vector3(0, -5, 0);
 		}
 
         if (cardName == CardName.ComboBreaker)
@@ -167,6 +176,67 @@ public class Card : MonoBehaviour
     public void SelectCard()
     {
         endTurnButton.GetComponent<EndTurnButton>().setCard(this);
+
+		switch (cardColor)    //Animator colors are: None = 0; Red = 1; Blue = 2; Green = 3; Yellow = 4;
+		{
+			case CardColor.Red:
+				if (!player.GetComponent<Animator>().GetBool("Red"))
+				{
+					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
+					{
+						player.GetComponent<Animator>().SetTrigger("ChangeColor");
+					}
+					player.GetComponent<Animator>().SetBool("Red", true);
+					player.GetComponent<Animator>().SetBool("Blue", false);
+					player.GetComponent<Animator>().SetBool("Green", false);
+					player.GetComponent<Animator>().SetBool("Yellow", false);
+					player.GetComponent<Animator>().SetInteger("Color", 1);
+				}
+				break;
+			case CardColor.Blue:
+				if (!player.GetComponent<Animator>().GetBool("Blue"))
+				{
+					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
+					{
+						player.GetComponent<Animator>().SetTrigger("ChangeColor");
+					}
+					player.GetComponent<Animator>().SetBool("Blue", true);
+					player.GetComponent<Animator>().SetBool("Red", false);
+					player.GetComponent<Animator>().SetBool("Green", false);
+					player.GetComponent<Animator>().SetBool("Yellow", false);
+					player.GetComponent<Animator>().SetInteger("Color", 2);
+				}
+				break;
+			case CardColor.Green:
+				if (!player.GetComponent<Animator>().GetBool("Green"))
+				{
+					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
+					{
+						player.GetComponent<Animator>().SetTrigger("ChangeColor");
+					}
+					player.GetComponent<Animator>().SetBool("Green", true);
+					player.GetComponent<Animator>().SetBool("Blue", false);
+					player.GetComponent<Animator>().SetBool("Red", false);
+					player.GetComponent<Animator>().SetBool("Yellow", false);
+					player.GetComponent<Animator>().SetInteger("Color", 3);
+				}
+				break;
+			case CardColor.Yellow:
+				if (!player.GetComponent<Animator>().GetBool("Yellow"))
+				{
+					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
+					{
+						player.GetComponent<Animator>().SetTrigger("ChangeColor");
+					}
+					player.GetComponent<Animator>().SetBool("Yellow", true);
+					player.GetComponent<Animator>().SetBool("Blue", false);
+					player.GetComponent<Animator>().SetBool("Green", false);
+					player.GetComponent<Animator>().SetBool("Red", false);
+					player.GetComponent<Animator>().SetInteger("Color", 4);
+				}
+				break;
+		}
+		
     }
 	public void PlayCard()
     {

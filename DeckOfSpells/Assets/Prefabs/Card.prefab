@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -300, y: -152}
-  m_SizeDelta: {x: 168.3246, y: 271.4129}
+  m_SizeDelta: {x: 180, y: 271.4129}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4337530242780866310
 CanvasRenderer:
@@ -102,7 +102,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.94509804, g: 0.9490196, b: 0.9490196, a: 0.7176471}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -163,3 +163,4 @@ MonoBehaviour:
   poisonCardSprite: {fileID: -966339686, guid: 29258ff1a680771428a997ba814fa0e9, type: 3}
   lullabyCardSprite: {fileID: -1150848983, guid: 29258ff1a680771428a997ba814fa0e9, type: 3}
   comboBreakerCardSprite: {fileID: 1818928220, guid: 29258ff1a680771428a997ba814fa0e9, type: 3}
+  frozenCardEffect: {fileID: 4534274690592903939, guid: 3e2e700dbf01c1d47b266684513066c7, type: 3}

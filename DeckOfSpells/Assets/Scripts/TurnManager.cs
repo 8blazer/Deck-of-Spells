@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor.Animations;
 
 public class TurnManager : MonoBehaviour
 {
@@ -18,6 +19,18 @@ public class TurnManager : MonoBehaviour
 	[SerializeField] private TMP_Text outcomeText;
 
 	[SerializeField] private GameObject minionPrefab;
+
+	[SerializeField] private AnimatorController fireballAnimation;
+	[SerializeField] private AnimatorController lightningAnimation;
+	[SerializeField] private AnimatorController landslideAnimation;
+	[SerializeField] private AnimatorController freezeAnimation;
+	[SerializeField] private AnimatorController frightenAnimation;
+	[SerializeField] private AnimatorController poisonAnimation;
+	[SerializeField] private AnimatorController lullabyAnimation;
+	[SerializeField] private AnimatorController cureAnimation;
+	[SerializeField] private AnimatorController boostAnimation;
+	[SerializeField] private AnimatorController reflectAnimation;
+	[SerializeField] private GameObject cardEffectPrefab;
 
 
 
@@ -166,11 +179,15 @@ public class TurnManager : MonoBehaviour
 					{
 						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
+					GameObject effect1 = Instantiate(cardEffectPrefab, new Vector3(7.2f, -1, 0), Quaternion.identity);
+					effect1.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 				}
+				GameObject effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = lightningAnimation;
 				break;
             case CardName.Fireball:
 				if (deckManager.comboNumber == 1)
@@ -201,11 +218,15 @@ public class TurnManager : MonoBehaviour
 					{
 						player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 					}
+					effect = Instantiate(cardEffectPrefab, new Vector3(7.2f, -1, 0), Quaternion.identity);
+					effect.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = fireballAnimation;
 				break;
 			case CardName.Landslide:
 				if (enemyCard == CardName.Reflect)
@@ -224,14 +245,20 @@ public class TurnManager : MonoBehaviour
 					{
 						player.GetComponent<Player>().TakeDamage(3, false);
 					}
+					effect = Instantiate(cardEffectPrefab, new Vector3(7.2f, -1, 0), Quaternion.identity);
+					effect.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					enemy.GetComponent<Enemy>().TakeDamage(3, false);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = landslideAnimation;
 				break;
 			case CardName.Freeze:
 				enemy.GetComponent<StatusEffect>().AddStatus(Status.Frozen, deckManager.comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = freezeAnimation;
 				break;
 			case CardName.Lullaby:
 				if (deckManager.comboNumber == 1 && Random.Range(0, 4) < 2)
@@ -246,12 +273,18 @@ public class TurnManager : MonoBehaviour
 				{
 					enemy.GetComponent<StatusEffect>().AddStatus(Status.Asleep, 2);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = lullabyAnimation;
 				break;
 			case CardName.Frighten:
 				enemy.GetComponent<StatusEffect>().AddStatus(Status.Frightened, deckManager.comboNumber + 1);
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = frightenAnimation;
 				break;
 			case CardName.Poison:
 				enemy.GetComponent<StatusEffect>().AddStatus(Status.Poisoned, deckManager.comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = poisonAnimation;
 				break;
 			case CardName.ComboBreaker:
 				if (deckManager.comboNumber == 1)
@@ -283,9 +316,11 @@ public class TurnManager : MonoBehaviour
 				{
 					player.GetComponent<Player>().CureMinions();
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = cureAnimation;
 				break;
 			case CardName.Tree:
-				GameObject minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				GameObject minion = Instantiate(minionPrefab, player.transform.position + new Vector3(1.8f, 0, 0), Quaternion.identity);
 				if (deckManager.comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 2, 0);
@@ -301,7 +336,7 @@ public class TurnManager : MonoBehaviour
 				player.GetComponent<Player>().AddMinion(minion);
 				break;
 			case CardName.Spikey:
-				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(1.8f, 0, 0), Quaternion.identity);
 				if (deckManager.comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 1, 1);
@@ -317,7 +352,7 @@ public class TurnManager : MonoBehaviour
 				player.GetComponent<Player>().AddMinion(minion);
 				break;
 			case CardName.Wall:
-				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(2, 0, 0), Quaternion.identity);
+				minion = Instantiate(minionPrefab, player.transform.position + new Vector3(1.8f, 0, 0), Quaternion.identity);
 				if (deckManager.comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 3, 0);
@@ -334,8 +369,17 @@ public class TurnManager : MonoBehaviour
 				break;
 			case CardName.Boost:
 				player.GetComponent<Player>().ChangeMinionDamage(deckManager.comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = boostAnimation;
 				break;
 		}
+		player.GetComponent<Animator>().SetInteger("Color", 0);
+		player.GetComponent<Animator>().SetBool("Red", false);
+		player.GetComponent<Animator>().SetBool("Blue", false);
+		player.GetComponent<Animator>().SetBool("Green", false);
+		player.GetComponent<Animator>().SetBool("Yellow", false);
+		player.GetComponent<Animator>().SetTrigger("PlayedTurn");
+		player.GetComponent<Animator>().ResetTrigger("ChangeColor");
 		enemy.GetComponent<Enemy>().TakeDamage(player.GetComponent<Player>().MinionTurn(), false);
 	}
 
@@ -386,11 +430,15 @@ public class TurnManager : MonoBehaviour
 					{
 						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
+					GameObject effect1 = Instantiate(cardEffectPrefab, new Vector3(-7f, -1, 0), Quaternion.identity);
+					effect1.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 				}
+				GameObject effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = lightningAnimation;
 				break;
 			case CardName.Fireball:
 				if (enemy.GetComponent<Enemy>().comboNumber == 1)
@@ -421,11 +469,15 @@ public class TurnManager : MonoBehaviour
 					{
 						enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 					}
+					effect = Instantiate(cardEffectPrefab, new Vector3(-7f, -1, 0), Quaternion.identity);
+					effect.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					player.GetComponent<Player>().TakeDamage(DamageRandomizer(intArray), false);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = fireballAnimation;
 				break;
 			case CardName.Landslide:
 				if (playerCard == CardName.Reflect)
@@ -444,14 +496,20 @@ public class TurnManager : MonoBehaviour
 					{
 						enemy.GetComponent<Enemy>().TakeDamage(3, false);
 					}
+					effect = Instantiate(cardEffectPrefab, new Vector3(-7f, -1, 0), Quaternion.identity);
+					effect.GetComponent<Animator>().runtimeAnimatorController = reflectAnimation;
 				}
 				else
 				{
 					player.GetComponent<Player>().TakeDamage(3, false);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = landslideAnimation;
 				break;
 			case CardName.Freeze:
 				player.GetComponent<StatusEffect>().AddStatus(Status.Frozen, enemy.GetComponent<Enemy>().comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = freezeAnimation;
 				break;
 			case CardName.Lullaby:
 				if (enemy.GetComponent<Enemy>().comboNumber == 1 && Random.Range(0, 4) < 2)
@@ -466,12 +524,18 @@ public class TurnManager : MonoBehaviour
 				{
 					player.GetComponent<StatusEffect>().AddStatus(Status.Asleep, 2);
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = lullabyAnimation;
 				break;
 			case CardName.Frighten:
 				player.GetComponent<StatusEffect>().AddStatus(Status.Frightened, enemy.GetComponent<Enemy>().comboNumber + 1);
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = frightenAnimation;
 				break;
 			case CardName.Poison:
 				player.GetComponent<StatusEffect>().AddStatus(Status.Poisoned, enemy.GetComponent<Enemy>().comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(-7.5f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = poisonAnimation;
 				break;
 			case CardName.ComboBreaker:
 				if (enemy.GetComponent<Enemy>().comboNumber == 11)
@@ -503,9 +567,12 @@ public class TurnManager : MonoBehaviour
 				{
 					enemy.GetComponent<Enemy>().CureMinions();
 				}
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = cureAnimation;
 				break;
 			case CardName.Tree:
-				GameObject minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				GameObject minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2.5f, .3f, 0), Quaternion.identity);
+				minion.GetComponent<SpriteRenderer>().flipX = true;
 				if (enemy.GetComponent<Enemy>().comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Tree, 2, 0);
@@ -521,7 +588,8 @@ public class TurnManager : MonoBehaviour
 				enemy.GetComponent<Enemy>().AddMinion(minion);
 				break;
 			case CardName.Spikey:
-				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2.5f, .3f, 0), Quaternion.identity);
+				minion.GetComponent<SpriteRenderer>().flipX = true;
 				if (enemy.GetComponent<Enemy>().comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Spikey, 1, 1);
@@ -537,7 +605,8 @@ public class TurnManager : MonoBehaviour
 				enemy.GetComponent<Enemy>().AddMinion(minion);
 				break;
 			case CardName.Wall:
-				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2, 0, 0), Quaternion.identity);
+				minion = Instantiate(minionPrefab, enemy.transform.position - new Vector3(2.5f, .3f, 0), Quaternion.identity);
+				minion.GetComponent<SpriteRenderer>().flipX = true;
 				if (enemy.GetComponent<Enemy>().comboNumber == 1)
 				{
 					minion.GetComponent<Minions>().CreateMinion(Minion.Wall, 3, 0);
@@ -554,6 +623,8 @@ public class TurnManager : MonoBehaviour
 				break;
 			case CardName.Boost:
 				enemy.GetComponent<Enemy>().ChangeMinionDamage(enemy.GetComponent<Enemy>().comboNumber);
+				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<Animator>().runtimeAnimatorController = boostAnimation;
 				break;
 		}
 

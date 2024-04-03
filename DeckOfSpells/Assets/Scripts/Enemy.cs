@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
 	private int startHealth;
 
 	List<CardName> deck = new List<CardName>();
-	List<CardName> discardDeck = new List<CardName>();
 	List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
 	[SerializeField] private TMP_Text cardSelectedText;
@@ -49,6 +48,14 @@ public class Enemy : MonoBehaviour
 		deck.Add(CardName.ComboBreaker);
 		deck.Add(CardName.Freeze);
 		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
 		//deck.Add(CardName.Freeze);
 		deck.Add(CardName.Reflect);
 		deck.Add(CardName.Reflect);
@@ -57,17 +64,18 @@ public class Enemy : MonoBehaviour
 		deck.Add(CardName.Spikey);
 		deck.Add(CardName.Spikey);
 		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
+
 		//deck.Add(CardName.Reflect);
 
 
 		SelectCard();
 	}
-    public void SelectCard()
+
+	private void Update()
+	{
+		//Debug.Log(player.GetComponent<Animator>().GetInteger("Color"));
+	}
+	public void SelectCard()
     {
         while (selectedCards.Count > 0)
         {
@@ -349,6 +357,11 @@ public class Enemy : MonoBehaviour
 			damage += minion.GetComponent<Minions>().GetDamage();
 		}
 
+		if (damage > 0)
+		{
+			player.GetComponent<Animator>().SetTrigger("Hurt");
+		}
+
 		return damage;
 	}
 
@@ -356,7 +369,7 @@ public class Enemy : MonoBehaviour
 	{
 		foreach (GameObject min in minions)
 		{
-			min.transform.position += new Vector3(2, 0, 0);
+			min.transform.position -= new Vector3(2, 0, 0);
 		}
 		minions.Add(minion);
 	}

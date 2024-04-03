@@ -9,19 +9,6 @@ public class EndTurnButton : MonoBehaviour
     [SerializeField] private GameObject deckManager;
 	[SerializeField] private GameObject turnManager;
 
-
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void playCard()
     {
         if (selectedCard != null)

@@ -8,7 +8,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
 
-    private int health = 1000;
+    private int health = 10;
     [SerializeField] private TMP_Text healthText;
 	[SerializeField] private GameObject deckManager;
 	private List<GameObject> minions = new List<GameObject>();
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
 					minionCount--;
 				}
 			}
+			GetComponent<Animator>().SetTrigger("Hurt");
 			health -= damage;
 		}
 		else
@@ -44,16 +45,20 @@ public class Player : MonoBehaviour
 					minionCount--;
 				}
 			}
-			if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened) && damage > 0)
+			if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened))
 			{
 				damage = (int)(damage * 1.5f);
 			}
-			health -= damage;
+			if (damage > 0)
+			{
+				GetComponent<Animator>().SetTrigger("Hurt");
+				health -= damage;
+			}
 		}
 		healthText.text = health.ToString();
 		if (health < 1)
 		{
-			Destroy(gameObject);
+			GetComponent<Animator>().SetTrigger("Defeated");
 		}
 	}
 	public int GetHealth()
