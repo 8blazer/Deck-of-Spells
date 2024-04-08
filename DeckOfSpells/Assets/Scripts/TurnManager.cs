@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEditor.Animations;
 
 public class TurnManager : MonoBehaviour
 {
@@ -20,16 +19,16 @@ public class TurnManager : MonoBehaviour
 
 	[SerializeField] private GameObject minionPrefab;
 
-	[SerializeField] private AnimatorController fireballAnimation;
-	[SerializeField] private AnimatorController lightningAnimation;
-	[SerializeField] private AnimatorController landslideAnimation;
-	[SerializeField] private AnimatorController freezeAnimation;
-	[SerializeField] private AnimatorController frightenAnimation;
-	[SerializeField] private AnimatorController poisonAnimation;
-	[SerializeField] private AnimatorController lullabyAnimation;
-	[SerializeField] private AnimatorController cureAnimation;
-	[SerializeField] private AnimatorController boostAnimation;
-	[SerializeField] private AnimatorController reflectAnimation;
+	[SerializeField] private RuntimeAnimatorController fireballAnimation;
+	[SerializeField] private RuntimeAnimatorController lightningAnimation;
+	[SerializeField] private RuntimeAnimatorController landslideAnimation;
+	[SerializeField] private RuntimeAnimatorController freezeAnimation;
+	[SerializeField] private RuntimeAnimatorController frightenAnimation;
+	[SerializeField] private RuntimeAnimatorController poisonAnimation;
+	[SerializeField] private RuntimeAnimatorController lullabyAnimation;
+	[SerializeField] private RuntimeAnimatorController cureAnimation;
+	[SerializeField] private RuntimeAnimatorController boostAnimation;
+	[SerializeField] private RuntimeAnimatorController reflectAnimation;
 	[SerializeField] private GameObject cardEffectPrefab;
 
 
