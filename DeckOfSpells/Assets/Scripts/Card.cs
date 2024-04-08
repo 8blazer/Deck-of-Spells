@@ -35,6 +35,7 @@ public class Card : MonoBehaviour
 	[SerializeField] private Sprite lullabyCardSprite;
 	[SerializeField] private Sprite comboBreakerCardSprite;
 	[SerializeField] private GameObject frozenCardEffect;
+	private GameObject spellCharge;
 
 	// Start is called before the first frame update
 	void Start()
@@ -43,6 +44,7 @@ public class Card : MonoBehaviour
         endTurnButton = GameObject.Find("EndTurnButton");
         turnManager = GameObject.Find("TurnManager");
         player = GameObject.FindWithTag("Player");
+		spellCharge = GameObject.Find("SpellCasting");
         //nameText.text = cardName.ToString();
         switch (cardName)
         {
@@ -175,67 +177,25 @@ public class Card : MonoBehaviour
 
     public void SelectCard()
     {
-        endTurnButton.GetComponent<EndTurnButton>().setCard(this);
-
-		switch (cardColor)    //Animator colors are: None = 0; Red = 1; Blue = 2; Green = 3; Yellow = 4;
+		switch (cardColor)
 		{
 			case CardColor.Red:
-				if (!player.GetComponent<Animator>().GetBool("Red"))
-				{
-					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
-					{
-						player.GetComponent<Animator>().SetTrigger("ChangeColor");
-					}
-					player.GetComponent<Animator>().SetBool("Red", true);
-					player.GetComponent<Animator>().SetBool("Blue", false);
-					player.GetComponent<Animator>().SetBool("Green", false);
-					player.GetComponent<Animator>().SetBool("Yellow", false);
-					player.GetComponent<Animator>().SetInteger("Color", 1);
-				}
+				spellCharge.GetComponent<SpellCharge>().SetColor(Color.red);
 				break;
 			case CardColor.Blue:
-				if (!player.GetComponent<Animator>().GetBool("Blue"))
-				{
-					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
-					{
-						player.GetComponent<Animator>().SetTrigger("ChangeColor");
-					}
-					player.GetComponent<Animator>().SetBool("Blue", true);
-					player.GetComponent<Animator>().SetBool("Red", false);
-					player.GetComponent<Animator>().SetBool("Green", false);
-					player.GetComponent<Animator>().SetBool("Yellow", false);
-					player.GetComponent<Animator>().SetInteger("Color", 2);
-				}
+				spellCharge.GetComponent<SpellCharge>().SetColor(Color.blue);
 				break;
 			case CardColor.Green:
-				if (!player.GetComponent<Animator>().GetBool("Green"))
-				{
-					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
-					{
-						player.GetComponent<Animator>().SetTrigger("ChangeColor");
-					}
-					player.GetComponent<Animator>().SetBool("Green", true);
-					player.GetComponent<Animator>().SetBool("Blue", false);
-					player.GetComponent<Animator>().SetBool("Red", false);
-					player.GetComponent<Animator>().SetBool("Yellow", false);
-					player.GetComponent<Animator>().SetInteger("Color", 3);
-				}
+				spellCharge.GetComponent<SpellCharge>().SetColor(Color.green);
 				break;
 			case CardColor.Yellow:
-				if (!player.GetComponent<Animator>().GetBool("Yellow"))
-				{
-					if (player.GetComponent<Animator>().GetInteger("Color") != 0)
-					{
-						player.GetComponent<Animator>().SetTrigger("ChangeColor");
-					}
-					player.GetComponent<Animator>().SetBool("Yellow", true);
-					player.GetComponent<Animator>().SetBool("Blue", false);
-					player.GetComponent<Animator>().SetBool("Green", false);
-					player.GetComponent<Animator>().SetBool("Red", false);
-					player.GetComponent<Animator>().SetInteger("Color", 4);
-				}
+				spellCharge.GetComponent<SpellCharge>().SetColor(Color.yellow);
 				break;
 		}
+
+		player.GetComponent<Animator>().SetBool("SpellChosen", true);
+		endTurnButton.GetComponent<EndTurnButton>().setCard(this);
+		spellCharge.GetComponent<SpriteRenderer>().enabled = true;
 		
     }
 	public void PlayCard()

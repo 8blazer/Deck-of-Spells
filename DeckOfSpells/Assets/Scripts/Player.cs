@@ -8,7 +8,7 @@ using TMPro;
 public class Player : MonoBehaviour
 {
 
-    private int health = 10;
+    private int health = 20;
     [SerializeField] private TMP_Text healthText;
 	[SerializeField] private GameObject deckManager;
 	private List<GameObject> minions = new List<GameObject>();
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
 		healthText.text = health.ToString();
 		if (health < 1)
 		{
-			GetComponent<Animator>().SetTrigger("Defeated");
+			GetComponent<Animator>().SetBool("Defeated", true);
 		}
 	}
 	public int GetHealth()

@@ -11,7 +11,10 @@ public class EndTurnButton : MonoBehaviour
 
     public void playCard()
     {
-        if (selectedCard != null)
+        GameObject player = GameObject.Find("Player");
+        player.GetComponent<Animator>().SetBool("SpellChosen", false);
+		player.GetComponent<Animator>().SetBool("SpellFinished", true);
+		if (selectedCard != null)
         {
 			selectedCard.GetComponent<Card>().PlayCard();
 		}

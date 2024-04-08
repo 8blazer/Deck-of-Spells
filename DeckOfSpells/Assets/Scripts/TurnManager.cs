@@ -226,6 +226,7 @@ public class TurnManager : MonoBehaviour
 					enemy.GetComponent<Enemy>().TakeDamage(DamageRandomizer(intArray), false);
 				}
 				effect = Instantiate(cardEffectPrefab, new Vector3(7.7f, -1, 0), Quaternion.identity);
+				effect.GetComponent<SpriteRenderer>().flipX = true;
 				effect.GetComponent<Animator>().runtimeAnimatorController = fireballAnimation;
 				break;
 			case CardName.Landslide:
@@ -373,13 +374,6 @@ public class TurnManager : MonoBehaviour
 				effect.GetComponent<Animator>().runtimeAnimatorController = boostAnimation;
 				break;
 		}
-		player.GetComponent<Animator>().SetInteger("Color", 0);
-		player.GetComponent<Animator>().SetBool("Red", false);
-		player.GetComponent<Animator>().SetBool("Blue", false);
-		player.GetComponent<Animator>().SetBool("Green", false);
-		player.GetComponent<Animator>().SetBool("Yellow", false);
-		player.GetComponent<Animator>().SetTrigger("PlayedTurn");
-		player.GetComponent<Animator>().ResetTrigger("ChangeColor");
 		enemy.GetComponent<Enemy>().TakeDamage(player.GetComponent<Player>().MinionTurn(), false);
 	}
 

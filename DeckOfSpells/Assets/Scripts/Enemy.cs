@@ -6,13 +6,12 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
-    private int health = 105;
+    private int health = 20;
 	private int startHealth;
 
 	List<CardName> deck = new List<CardName>();
 	List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
-	[SerializeField] private TMP_Text cardSelectedText;
 	[SerializeField] private GameObject player;
 	[SerializeField] private GameObject deckManager;
 	private int cardPriority = 0;
@@ -34,36 +33,39 @@ public class Enemy : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-        healthText.text = "105";
+        healthText.text = "20";
 		startHealth = health;
 
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Lightning);
-		deck.Add(CardName.Lullaby);
-		deck.Add(CardName.Lullaby);
-		//deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Lightning);
 		deck.Add(CardName.Landslide);
-		deck.Add(CardName.ComboBreaker);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Freeze);
-		//deck.Add(CardName.Freeze);
-		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Tree);
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Wall);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Wall);
+		deck.Add(CardName.Boost);
+		deck.Add(CardName.Boost);
+		deck.Add(CardName.Cure);
+		deck.Add(CardName.Cure);
+		deck.Add(CardName.ComboBooster);
+		deck.Add(CardName.ComboBooster);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Reflect);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Frighten);
+		deck.Add(CardName.Frighten);
+		deck.Add(CardName.Poison);
+		deck.Add(CardName.Poison);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Revivify);
 
 		//deck.Add(CardName.Reflect);
 
@@ -104,7 +106,6 @@ public class Enemy : MonoBehaviour
 		if (selectedCards.Count > 0)
 		{
 			CardName selectedCard = SelectCardAI();
-			cardSelectedText.text = selectedCard.ToString();
 			switch (selectedCard)
 			{
 				case CardName.Fireball:
@@ -145,7 +146,6 @@ public class Enemy : MonoBehaviour
 		else
 		{
 			UpdateCombo(CardColor.None);
-			cardSelectedText.text = "None";
 			turnManager.GetComponent<TurnManager>().SetEnemyCard(CardName.None, 0);
 		}
     }
@@ -251,17 +251,50 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage, bool poison)
     {
-		if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened) && damage > 0 && !poison)
+		if (poison)
 		{
-			damage = (int)(damage * 1.5f);
+			for (int i = 0; i < minions.Count; i++)
+			{
+				minions[i].GetComponent<Minions>().TakeDamage(damage, true);
+				if (minions[i].GetComponent<Minions>().GetHealth() <= 0)
+				{
+					Destroy(minions[i]);
+					minions.RemoveAt(i);
+				}
+			}
+			GetComponent<Animator>().SetTrigger("Hurt");
+			health -= damage;
 		}
-        health -= damage;
+		else
+		{
+			for (int i = 0; i < minions.Count; i++)
+			{
+				if (damage > 0)
+				{
+					damage = minions[i].GetComponent<Minions>().TakeDamage(damage, false);
+				}
+				if (minions[i].GetComponent<Minions>().GetHealth() <= 0)
+				{
+					//Destroy(minions[i]);
+					minions.RemoveAt(i);
+				}
+			}
+			if (GetComponent<StatusEffect>().GetStatusList().ContainsKey(Status.Frightened))
+			{
+				damage = (int)(damage * 1.5f);
+			}
+			if (damage > 0)
+			{
+				GetComponent<Animator>().SetTrigger("Hurt");
+				health -= damage;
+			}
+		}
 		healthText.text = health.ToString();
 		if (health < 1)
-        {
-            Destroy(gameObject);
-        }
-    }
+		{
+			GetComponent<Animator>().SetBool("Defeated", true);
+		}
+	}
 
 	public void SetBroken()
 	{

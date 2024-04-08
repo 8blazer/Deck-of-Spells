@@ -13,10 +13,6 @@ public class DeckManager : MonoBehaviour
 	public GameObject cardPrefab;
 	public GameObject canvas;
 
-	public TMP_Text deckText;
-	public TMP_Text discardText;
-	public TMP_Text comboText;
-
 	private CardColor comboColor = CardColor.None;
 	public int comboNumber;
 	private bool comboDelay = false;
@@ -31,36 +27,36 @@ public class DeckManager : MonoBehaviour
     void Start()
     {
 
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Fireball);
+		deck.Add(CardName.Lightning);
+		deck.Add(CardName.Lightning);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Landslide);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Spikey);
+		deck.Add(CardName.Tree);
 		deck.Add(CardName.Tree);
 		deck.Add(CardName.Wall);
 		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Wall);
-		deck.Add(CardName.Spikey);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Fireball);
-		deck.Add(CardName.Lightning);
-		deck.Add(CardName.Lightning);
-		deck.Add(CardName.Landslide);
-		deck.Add(CardName.Landslide);
 		deck.Add(CardName.Boost);
-		deck.Add(CardName.ComboBooster);
-		deck.Add(CardName.ComboBreaker);
+		deck.Add(CardName.Boost);
 		deck.Add(CardName.Cure);
-		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Cure);
+		deck.Add(CardName.ComboBooster);
+		deck.Add(CardName.ComboBooster);
 		deck.Add(CardName.Reflect);
-		deck.Add(CardName.Frighten);
+		deck.Add(CardName.Reflect);
 		deck.Add(CardName.Freeze);
-		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Freeze);
+		deck.Add(CardName.Frighten);
+		deck.Add(CardName.Frighten);
 		deck.Add(CardName.Poison);
-		deck.Add(CardName.Frighten);
-		deck.Add(CardName.Freeze);
-
+		deck.Add(CardName.Poison);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Lullaby);
+		deck.Add(CardName.Revivify);
+		deck.Add(CardName.Revivify);
 
 		ChooseCards();
 	}
@@ -107,9 +103,6 @@ public class DeckManager : MonoBehaviour
 		}
 
 		StartCoroutine(CheckCardValidity());
-
-		deckText.text = "Cards left in deck: " + deck.Count;
-		discardText.text = "Cards in discard: " + discardDeck.Count;
 
 	}
 
@@ -158,7 +151,6 @@ public class DeckManager : MonoBehaviour
 			comboColor = color;
 			comboNumber = 1;
 		}
-		comboText.text = "Combo: " + comboColor + " " + comboNumber;
 
 		if (comboDelay)
 		{
