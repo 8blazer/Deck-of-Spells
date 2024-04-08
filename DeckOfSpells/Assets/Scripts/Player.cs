@@ -13,6 +13,14 @@ public class Player : MonoBehaviour
 	[SerializeField] private GameObject deckManager;
 	private List<GameObject> minions = new List<GameObject>();
 	public int minionCount = 0;
+
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+	}
 	public void TakeDamage(int damage, bool poison)
 	{
 		if (poison)
