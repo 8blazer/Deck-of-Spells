@@ -10,14 +10,20 @@ public class PlayerMovement : MonoBehaviour
 	private bool canMove = true;
 	public int health;
 	public int maxHealth;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+	private List<CardName> selectedCards = new List<CardName>();
+	private List<CardName> unlockedCards = new List<CardName>();
+
+	private void Start()
+	{
+		unlockedCards.Add(CardName.Fireball);
+		unlockedCards.Add(CardName.Lightning);
+		unlockedCards.Add(CardName.Spikey);
+		unlockedCards.Add(CardName.Frighten);
+	}
+
+	// Update is called once per frame
+	void Update()
     {
         if (canMove)
         {
@@ -82,5 +88,27 @@ public class PlayerMovement : MonoBehaviour
 		health = data.health;
 		maxHealth = data.maxHealth;
 		transform.position = new Vector3(data.position[0], data.position[1], 0);
+		selectedCards = data.selectedCards;
+		unlockedCards = data.cardsUnlocked;
+	}
+
+	public List<CardName> GetCardsUnlocked()
+	{
+		return unlockedCards;
+	}
+
+	public List<CardName> GetCardsSelected()
+	{
+		return selectedCards;
+	}
+
+	public void AddSelectedCard(CardName card)
+	{
+		selectedCards.Add(card);
+	}
+
+	public void RemoveSelectedCard(CardName card)
+	{
+		selectedCards.Remove(card);
 	}
 }
