@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SimpleButtons : MonoBehaviour
 {
@@ -23,7 +25,11 @@ public class SimpleButtons : MonoBehaviour
 
 	public void NewGame()
     {
-        SceneManager.LoadScene("Overworld");
+		string path = Application.persistentDataPath;
+		DirectoryInfo directory = new DirectoryInfo(path);
+		directory.Delete(true);
+		Directory.CreateDirectory(path);
+		SceneManager.LoadScene("Overworld");
     }
 
     public void LoadGame()

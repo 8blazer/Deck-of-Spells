@@ -58,6 +58,12 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Revivify);
 		deck.Add(CardName.Revivify);
 
+		//ChooseCards();
+	}
+
+	public void SetDeck(List<CardName> list)
+	{
+		deck = list;
 		ChooseCards();
 	}
 

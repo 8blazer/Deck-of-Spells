@@ -16,18 +16,19 @@ public class SaveData
     public List<CardName> selectedCards;
     public float[] position;
 
-    public SaveData(GameObject objectToSave)
+    public SaveData(GameObject objectToSave, bool locationSave)
     {
         if (objectToSave.GetComponent<PlayerMovement>() != null)
         {
-			position = new float[2];
-			position[0] = objectToSave.transform.position.x;
-			position[1] = objectToSave.transform.position.y;
+            if (locationSave)
+            {
+				position = new float[2];
+				position[0] = objectToSave.transform.position.x;
+				position[1] = objectToSave.transform.position.y;
+			}
             cardsUnlocked = objectToSave.GetComponent<PlayerMovement>().GetCardsUnlocked();
             selectedCards = objectToSave.GetComponent<PlayerMovement>().GetCardsSelected();
 		}
-
-
     }
 
 

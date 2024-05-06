@@ -9,8 +9,8 @@ public class Enemy : MonoBehaviour
     private int health = 20;
 	private int startHealth;
 
-	List<CardName> deck = new List<CardName>();
-	List<CardName> selectedCards = new List<CardName>();
+	[SerializeField] List<CardName> deck = new List<CardName>();
+	[SerializeField] List<CardName> selectedCards = new List<CardName>();
     [SerializeField] private GameObject turnManager;
 	[SerializeField] private GameObject player;
 	[SerializeField] private GameObject deckManager;
@@ -25,10 +25,10 @@ public class Enemy : MonoBehaviour
 
 	private List<GameObject> minions = new List<GameObject>();
 
-	[SerializeField] private float redFavor = 1;
-	[SerializeField] private float greenFavor = 1;
-	[SerializeField] private float blueFavor = 1;
-	[SerializeField] private float yellowFavor = 1;
+	private float redFavor = 1;
+	private float greenFavor = 1;
+	private float blueFavor = 1;
+	private float yellowFavor = 1;
 
 	// Start is called before the first frame update
 	void Start()
@@ -70,12 +70,13 @@ public class Enemy : MonoBehaviour
 		//deck.Add(CardName.Reflect);
 
 
-		SelectCard();
+		//SelectCard();
 	}
 
-	private void Update()
+	public void SetDeck(List<CardName> list)
 	{
-		//Debug.Log(player.GetComponent<Animator>().GetInteger("Color"));
+		deck = list;
+		SelectCard();
 	}
 	public void SelectCard()
     {

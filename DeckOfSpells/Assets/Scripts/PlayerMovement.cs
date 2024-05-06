@@ -76,9 +76,9 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	public void SaveData()
+	public void SaveData(bool locationSave)
 	{
-		SaveSystem.SaveData(this.gameObject);
+		SaveSystem.SaveData(this.gameObject, locationSave);
 	}
 
 	public void LoadData()
@@ -87,9 +87,13 @@ public class PlayerMovement : MonoBehaviour
 
 		health = data.health;
 		maxHealth = data.maxHealth;
-		transform.position = new Vector3(data.position[0], data.position[1], 0);
 		selectedCards = data.selectedCards;
 		unlockedCards = data.cardsUnlocked;
+		if (data.position != null)
+		{
+			transform.position = new Vector3(data.position[0], data.position[1], 0);
+		}
+
 	}
 
 	public List<CardName> GetCardsUnlocked()

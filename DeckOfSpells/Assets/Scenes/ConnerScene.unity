@@ -472,7 +472,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798672830}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ceca7944ee634d34cb7e0f3241892451, type: 3}
@@ -710,16 +710,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthText: {fileID: 1560240673}
+  deck: 
   turnManager: {fileID: 1518875475}
   player: {fileID: 195369422}
   deckManager: {fileID: 633305587}
   comboNumber: 0
   comboDelayTimer: 0
   comboDelayColor: 4
-  redFavor: 1
-  greenFavor: 1
-  blueFavor: 1
-  yellowFavor: 1
 --- !u!212 &1099855014
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1638,7 +1635,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1891171251}
   m_OnClick:
     m_PersistentCalls:

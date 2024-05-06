@@ -5,14 +5,14 @@ using UnityEngine;
 public static class SaveSystem
 {
     
-    public static void SaveData (GameObject objectToSave)
+    public static void SaveData (GameObject objectToSave, bool locationSaved)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         //string path = System.IO.Path.Combine(Application.persistentDataPath, "/player.idk");
         string path = Application.persistentDataPath + "/player.idk";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        SaveData data = new SaveData(objectToSave);
+        SaveData data = new SaveData(objectToSave, locationSaved);
 
         formatter.Serialize(stream, data);
         stream.Close();
