@@ -25,6 +25,7 @@ public class SimpleButtons : MonoBehaviour
 
 	public void NewGame()
     {
+		PlayerPrefs.DeleteAll();
 		string path = Application.persistentDataPath;
 		DirectoryInfo directory = new DirectoryInfo(path);
 		directory.Delete(true);
@@ -34,6 +35,8 @@ public class SimpleButtons : MonoBehaviour
 
     public void LoadGame()
     {
+		PlayerPrefs.DeleteAll();
+		PlayerPrefs.SetInt("UseTemp", 1);
 		DontDestroyOnLoad(this.gameObject);
         GetComponent<Canvas>().enabled = false;
 		sceneLoading = true;

@@ -8,8 +8,10 @@ public class LoadButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		if (SaveSystem.LoadData() != null)
+		SaveData save = SaveSystem.LoadData(false);
+		if (save != null && PlayerPrefs.GetInt("UseTemp") != 0)
 		{
+			PlayerPrefs.SetInt("UseTemp", 1);
 			GetComponent<Button>().interactable = true;
 		}
 	}

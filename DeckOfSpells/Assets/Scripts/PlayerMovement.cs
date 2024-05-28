@@ -10,16 +10,41 @@ public class PlayerMovement : MonoBehaviour
 	private bool canMove = true;
 	public int health;
 	public int maxHealth;
+	public int coins;
 
-	private List<CardName> selectedCards = new List<CardName>();
-	private List<CardName> unlockedCards = new List<CardName>();
+	private Dictionary<CardName, int> selectedCards = new Dictionary<CardName, int>();
+	private Dictionary<CardName, int> unlockedCards = new Dictionary<CardName, int>();
 
 	private void Start()
 	{
-		unlockedCards.Add(CardName.Fireball);
-		unlockedCards.Add(CardName.Lightning);
-		unlockedCards.Add(CardName.Spikey);
-		unlockedCards.Add(CardName.Frighten);
+		SaveData save = SaveSystem.LoadData(false);
+		if (save != null)
+		{
+			if (PlayerPrefs.GetInt("UseTemp") == 2)
+			{
+				transform.position = new Vector2(save.tempPosition[0], save.tempPosition[1]);
+				selectedCards = save.tempSelectedCards;
+				unlockedCards = save.tempCardsUnlocked;
+				coins += save.tempCoins;
+			}
+			else
+			{
+				transform.position = new Vector2(save.position[0], save.position[1]);
+				selectedCards = save.selectedCards;
+				unlockedCards = save.cardsUnlocked;
+				coins = save.coins;
+				health = save.health;
+			}
+		}
+
+		if (unlockedCards.Count == 0)
+		{
+			unlockedCards.Add(CardName.Fireball, 3);
+			unlockedCards.Add(CardName.Lightning, 1);
+			unlockedCards.Add(CardName.Spikey, 2);
+			unlockedCards.Add(CardName.Frighten, 1);
+		}
+		
 	}
 
 	// Update is called once per frame
@@ -76,14 +101,14 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	public void SaveData(bool locationSave)
+	public void SaveData(bool tempSave)
 	{
-		SaveSystem.SaveData(this.gameObject, locationSave);
+		SaveSystem.SaveData(this.gameObject, tempSave);
 	}
 
 	public void LoadData()
 	{
-		SaveData data = SaveSystem.LoadData();
+		SaveData data = SaveSystem.LoadData(false);
 
 		health = data.health;
 		maxHealth = data.maxHealth;
@@ -96,23 +121,50 @@ public class PlayerMovement : MonoBehaviour
 
 	}
 
-	public List<CardName> GetCardsUnlocked()
+	public Dictionary<CardName, int> GetCardsUnlocked()
 	{
 		return unlockedCards;
 	}
 
-	public List<CardName> GetCardsSelected()
+	public Dictionary<CardName, int> GetCardsSelected()
 	{
 		return selectedCards;
 	}
 
 	public void AddSelectedCard(CardName card)
 	{
-		selectedCards.Add(card);
+		if (selectedCards.ContainsKey(card))
+		{
+			selectedCards[card]++;
+		}
+		else
+		{
+			selectedCards.Add(card, 1);
+		}
+		//selectedCards.Add(card, selectedCards.TryGetValue(card, out 1));
 	}
 
 	public void RemoveSelectedCard(CardName card)
 	{
-		selectedCards.Remove(card);
+		if (selectedCards[card] == 1)
+		{
+			selectedCards.Remove(card);
+		}
+		else
+		{
+			selectedCards[card]--;
+		}
+	}
+
+	public void AddUnlockedCard(CardName card)
+	{
+		if (unlockedCards.ContainsKey(card))
+		{
+			unlockedCards[card]++;
+		}
+		else
+		{
+			unlockedCards.Add(card, 1);
+		}
 	}
 }

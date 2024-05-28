@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class DeckManager : MonoBehaviour
 {
     List<CardName> deck = new List<CardName>();
+	List<CardName> backupDeck = new List<CardName>();
 	List<CardName> discardDeck = new List<CardName>();
 	public List<GameObject> selectedCards = new List<GameObject>();
 	public GameObject cardPrefab;
@@ -19,6 +20,8 @@ public class DeckManager : MonoBehaviour
 	public int comboDelayTimer = 0;
 	public CardColor comboDelayColor = CardColor.None;
 	[SerializeField] private Button endTurnButton;
+	[SerializeField] private GameObject comboCounter;
+	[SerializeField] private List<Sprite> comboCounterImages = new List<Sprite>();
 
 	private bool comboBroken = false;
 
@@ -26,7 +29,7 @@ public class DeckManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+		/*
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Lightning);
@@ -57,13 +60,26 @@ public class DeckManager : MonoBehaviour
 		deck.Add(CardName.Lullaby);
 		deck.Add(CardName.Revivify);
 		deck.Add(CardName.Revivify);
-
+		*/
 		//ChooseCards();
 	}
 
-	public void SetDeck(List<CardName> list)
+	public void SetDeck(Dictionary<CardName, int> map)
 	{
-		deck = list;
+		List<CardName> cards = new List<CardName>();
+		foreach (CardName card in map.Keys)
+		{
+			for (int i = 0; i < map[card]; i++)
+			{
+				cards.Add(card);
+			}
+		}
+
+		deck = cards;
+		foreach (CardName card in deck)
+		{
+			backupDeck.Add(card);
+		}
 		ChooseCards();
 	}
 
@@ -168,6 +184,30 @@ public class DeckManager : MonoBehaviour
 				comboDelayColor = CardColor.None;
 			}
 		}
+
+		switch (comboColor)
+		{
+			case CardColor.Red:
+				{
+					comboCounter.GetComponent<Image>().sprite = comboCounterImages[comboNumber];
+					break;
+				}
+			case CardColor.Blue:
+				{
+					comboCounter.GetComponent<Image>().sprite = comboCounterImages[comboNumber + 3];
+					break;
+				}
+			case CardColor.Green:
+				{
+					comboCounter.GetComponent<Image>().sprite = comboCounterImages[comboNumber + 6];
+					break;
+				}
+			case CardColor.Yellow:
+				{
+					comboCounter.GetComponent<Image>().sprite = comboCounterImages[comboNumber + 9];
+					break;
+				}
+		}
 	}
 
 	public void GameEnd()
@@ -177,7 +217,7 @@ public class DeckManager : MonoBehaviour
 			Destroy(selectedCards[0]);
 			selectedCards.RemoveAt(0);
 		}
-		endTurnButton.GetComponent <Button>().interactable = false;
+		endTurnButton.GetComponent<Button>().interactable = false;
 	}
 
 	public CardColor GetComboColor()

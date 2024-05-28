@@ -38,12 +38,6 @@ public class TurnManager : MonoBehaviour
         deckManager = GameObject.FindWithTag("GameController").GetComponent<DeckManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetPlayerCard(CardName cardName, int priority)
     {
         playerCard = cardName;
@@ -103,6 +97,7 @@ public class TurnManager : MonoBehaviour
 		{
 			if (playerCard == CardName.Reflect)
 			{
+				enemy.GetComponent<Enemy>().EndBattle();
 				outcomeText.text = "Player Wins!";
 				deckManager.GameEnd();
 			}
@@ -119,6 +114,7 @@ public class TurnManager : MonoBehaviour
 		}
 		else if (enemy.GetComponent<Enemy>().GetHealth() < 1)
 		{
+			enemy.GetComponent<Enemy>().EndBattle();
 			outcomeText.text = "Player Wins!";
 			deckManager.GameEnd();
 		}

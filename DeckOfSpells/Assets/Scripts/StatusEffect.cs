@@ -23,7 +23,10 @@ public class StatusEffect : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
 		canvas = GameObject.Find("Canvas");
-		transform.SetParent(canvas.transform);
+		if (GetComponent<Enemy>() == null)
+		{
+			transform.SetParent(canvas.transform);
+		}
     }
 
 	public Dictionary<Status, int> GetStatusList()

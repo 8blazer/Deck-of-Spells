@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
-    private int health = 20;
+    private int health = 10;
 	private int startHealth;
+	private int playerHealth;
 
 	[SerializeField] List<CardName> deck = new List<CardName>();
 	[SerializeField] List<CardName> selectedCards = new List<CardName>();
@@ -30,11 +32,20 @@ public class Enemy : MonoBehaviour
 	private float blueFavor = 1;
 	private float yellowFavor = 1;
 
+	[SerializeField] private CardName unlockCard = CardName.None;
+	[SerializeField] private int coins;
+	public string location;
+
 	// Start is called before the first frame update
 	void Start()
     {
-        healthText.text = "20";
+		healthText.text = "10";
 		startHealth = health;
+
+		if (Random.Range(0, 6) > 0 && unlockCard.Equals(CardName.None))
+		{
+			ChooseUnlockCard();
+		}
 
 		deck.Add(CardName.Fireball);
 		deck.Add(CardName.Fireball);
@@ -77,6 +88,11 @@ public class Enemy : MonoBehaviour
 	{
 		deck = list;
 		SelectCard();
+	}
+
+	public void SetLocation(string locationNumber)
+	{
+		location = locationNumber;
 	}
 	public void SelectCard()
     {
@@ -393,7 +409,7 @@ public class Enemy : MonoBehaviour
 
 		if (damage > 0)
 		{
-			player.GetComponent<Animator>().SetTrigger("Hurt");
+			GetComponent<Animator>().SetTrigger("Hurt");
 		}
 
 		return damage;
@@ -416,6 +432,52 @@ public class Enemy : MonoBehaviour
 			minion.GetComponent<StatusEffect>().UpdateStatus();
 			minion.GetComponent<StatusEffect>().UpdateStatus();
 			minion.GetComponent<StatusEffect>().UpdateStatus();
+		}
+	}
+
+	public void ChooseUnlockCard()
+	{
+		SaveData save = SaveSystem.LoadData(true);
+		Dictionary<CardName, int> playerCards = save.tempCardsUnlocked;
+		int rng = Random.Range(0, 100);
+
+		foreach (CardName card in playerCards.Keys)
+		{
+			if (rng > playerCards[card] * 33)
+			{
+				unlockCard = card;
+				break;
+			}
+		}
+	}
+
+	public void EndBattle()
+	{
+		PlayerPrefs.SetInt(location, 1);
+		DontDestroyOnLoad(this.gameObject);
+		GetComponent<SpriteRenderer>().enabled = false;
+		playerHealth = player.GetComponent<Player>().GetHealth();
+		SceneManager.LoadScene("Overworld");
+		StartCoroutine(ChangeScene());
+	}
+
+	IEnumerator ChangeScene()
+	{
+		yield return new WaitForSeconds(.1f);
+		if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Overworld"))
+		{
+			player = GameObject.FindWithTag("Player");
+			player.GetComponent<PlayerMovement>().health = playerHealth;
+			if (unlockCard != CardName.None)
+			{
+				player.GetComponent<PlayerMovement>().AddUnlockedCard(unlockCard);
+			}
+			player.GetComponent<PlayerMovement>().coins += coins;
+			Destroy(this.gameObject);
+		}
+		else
+		{
+			StartCoroutine(ChangeScene());
 		}
 	}
 }

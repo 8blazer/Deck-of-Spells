@@ -5,27 +5,46 @@ using UnityEngine;
 public static class SaveSystem
 {
     
-    public static void SaveData (GameObject objectToSave, bool locationSaved)
+    public static void SaveData (GameObject objectToSave, bool tempSave)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        //string path = System.IO.Path.Combine(Application.persistentDataPath, "/player.idk");
-        string path = Application.persistentDataPath + "/player.idk";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        string path;
+		if (tempSave)
+		{
+			path = Application.persistentDataPath + "/player.tem";
+		}
+		else
+		{
+			path = Application.persistentDataPath + "/player.idk";
+		}
+		FileStream stream = new FileStream(path, FileMode.Create);
 
-        SaveData data = new SaveData(objectToSave, locationSaved);
+        SaveData data = new SaveData(objectToSave, tempSave);
 
         formatter.Serialize(stream, data);
         stream.Close();
-    }
+	}
 
-    public static SaveData LoadData()
+    public static SaveData LoadData(bool tempSave)
     {
-		//string path = System.IO.Path.Combine(Application.persistentDataPath, "/player.idk");
-		string path = Application.persistentDataPath + "/player.idk";
+        string path;
+        if (tempSave)
+        {
+			path = Application.persistentDataPath + "/player.tem";
+		}
+        else
+        {
+			path = Application.persistentDataPath + "/player.idk";
+		}
 		if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream (path, FileMode.Open);
+            if (stream.Length == 0)
+            {
+				stream.Close();
+				return null;
+            }
 
             SaveData data = formatter.Deserialize(stream) as SaveData;
             stream.Close();

@@ -25,18 +25,16 @@ public class MenuCardManager : MonoBehaviour
 	[SerializeField] private Sprite comboBreakerCardSprite;
 
 	public List<GameObject> cards = new List<GameObject>();
-	public List<CardName> unlockedCards;
-	public List<CardName> selectedCards;
+	public Dictionary<CardName, int> unlockedCards;
+	public Dictionary<CardName, int> selectedCards;
 
 	void Start()
 	{
-		Invoke("CreateMenu", 0.1f);
+		Invoke("CreateMenu", 0.2f);
 	}
 	public void CreateMenu()
 	{
 		PlayerMovement player = GameObject.Find("Player").GetComponent<PlayerMovement>();
-		//List<CardName> unlockedCards = player.GetCardsUnlocked();
-		//List<CardName> selectedCards = player.GetCardsSelected();
 		unlockedCards = player.GetCardsUnlocked();
 		selectedCards = player.GetCardsSelected();
 
@@ -57,22 +55,24 @@ public class MenuCardManager : MonoBehaviour
 	{
 		int x = -630;
 		int y = 250;
-		foreach (CardName card in selectedCards)
+		foreach (CardName card in selectedCards.Keys)
 		{
-			GameObject newCard = Instantiate(menuCardPrefab, transform.position, Quaternion.identity);
-			cards.Add(newCard);
-			newCard.GetComponent<Button>().enabled = false;
-			newCard.transform.SetParent(transform.parent, false);
-			//newCard.rectransform.position = new Vector3(x, y, 0);
-			newCard.GetComponent<RectTransform>().localPosition = new Vector3(x, y, 0);
-			newCard.GetComponent<MenuScroll>().leftSide = true;
-			x += 230;
-			if (x > -100)
+			for (int i = 0; i < selectedCards[card]; i++)
 			{
-				x = -630;
-				y -= 300;
+				GameObject newCard = Instantiate(menuCardPrefab, transform.position, Quaternion.identity);
+				cards.Add(newCard);
+				newCard.GetComponent<Button>().enabled = false;
+				newCard.transform.SetParent(transform.parent, false);
+				newCard.GetComponent<RectTransform>().localPosition = new Vector3(x, y, 0);
+				newCard.GetComponent<MenuScroll>().leftSide = true;
+				x += 230;
+				if (x > -100)
+				{
+					x = -630;
+					y -= 300;
+				}
+				SetCardData(newCard, card);
 			}
-			SetCardData(newCard, card);
 		}
 	}
 
@@ -81,26 +81,44 @@ public class MenuCardManager : MonoBehaviour
 		int x = 170;
 		int y = 250;
 
-		foreach (CardName card in unlockedCards)
+		foreach (CardName card in unlockedCards.Keys)
 		{
-			GameObject newCard = Instantiate(menuCardPrefab, transform.position, Quaternion.identity);
-			//cards.Add(newCard);
-			newCard.transform.SetParent(transform.parent, false);
-			//newCard.rectransform.position = new Vector3(x, y, 0);
-			newCard.GetComponent<RectTransform>().localPosition = new Vector3(x, y, 0);
-			newCard.GetComponent<MenuScroll>().leftSide = false;
-			x += 230;
-			if (x > 700)
+			int selectedNumber = 0;
+			if (selectedCards.ContainsKey(card))
 			{
-				x = 170;
-				y -= 300;
+				selectedNumber = selectedCards[card];
+				for (int i = 0; i < selectedCards[card]; i++)
+				{
+					GameObject newCard = Instantiate(menuCardPrefab, transform.position, Quaternion.identity);
+					newCard.transform.SetParent(transform.parent, false);
+					newCard.GetComponent<RectTransform>().localPosition = new Vector3(x, y, 0);
+					newCard.GetComponent<MenuScroll>().leftSide = false;
+					x += 230;
+					if (x > 700)
+					{
+						x = 170;
+						y -= 300;
+					}
+
+					SetCardData(newCard, card);
+					newCard.GetComponent<MenuScroll>().selected = true;
+				}
 			}
-
-			SetCardData(newCard, card);
-
-			if (selectedCards.Contains(card))
+			for (int i = 0; i < unlockedCards[card] - selectedNumber; i++)
 			{
-				newCard.GetComponent<MenuScroll>().selected = true;
+				GameObject newCard = Instantiate(menuCardPrefab, transform.position, Quaternion.identity);
+				newCard.transform.SetParent(transform.parent, false);
+				newCard.GetComponent<RectTransform>().localPosition = new Vector3(x, y, 0);
+				newCard.GetComponent<MenuScroll>().leftSide = false;
+				x += 230;
+				if (x > 700)
+				{
+					x = 170;
+					y -= 300;
+				}
+
+				SetCardData(newCard, card);
+				newCard.GetComponent<MenuScroll>().selected = false;
 			}
 		}
 	}
