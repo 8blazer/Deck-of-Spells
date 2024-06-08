@@ -37,9 +37,12 @@ public class SimpleButtons : MonoBehaviour
     {
 		PlayerPrefs.DeleteAll();
 		PlayerPrefs.SetInt("UseTemp", 1);
-		DontDestroyOnLoad(this.gameObject);
-        GetComponent<Canvas>().enabled = false;
-		sceneLoading = true;
+		if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("TitleScreen"))
+		{
+			DontDestroyOnLoad(this.gameObject);
+			GetComponent<Canvas>().enabled = false;
+			sceneLoading = true;
+		}
 		SceneManager.LoadScene("Overworld");
     }
 
@@ -60,6 +63,12 @@ public class SimpleButtons : MonoBehaviour
 			GameObject.Find("MenuCardManager").GetComponent<MenuCardManager>().RenderSelectedCards();
 			GetComponent<MenuScroll>().selected = true;
 		}
+	}
+
+	public void ResetFight()
+	{
+		GameObject turnManager = GameObject.Find("TurnManager");
+		turnManager.GetComponent<TurnManager>().ResetFight();
 	}
 
 }

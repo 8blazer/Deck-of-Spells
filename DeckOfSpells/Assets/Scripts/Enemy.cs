@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
-    private int health = 10;
+    [SerializeField] private int health = 10;
 	private int startHealth;
 	private int playerHealth;
 
@@ -322,6 +322,13 @@ public class Enemy : MonoBehaviour
     {
         return health;
     }
+
+	public void SetHealth()
+	{
+		health = startHealth;
+		healthText.text = "10";
+		SelectCard();
+	}
 	public void ChangeMinionDamage(int damageChange)
 	{
 		foreach (GameObject minion in minions)

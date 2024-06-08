@@ -74,6 +74,13 @@ public class Player : MonoBehaviour
         return health;
     }
 
+	public void SetHealth()
+	{
+		health = 20;
+		healthText.text = "20";
+		GetComponent<Animator>().SetBool("Defeated", false);
+	}
+
 	public List<GameObject> GetMinionList()
 	{
 		return minions;

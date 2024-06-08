@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class TurnManager : MonoBehaviour
 {
@@ -30,6 +32,7 @@ public class TurnManager : MonoBehaviour
 	[SerializeField] private RuntimeAnimatorController boostAnimation;
 	[SerializeField] private RuntimeAnimatorController reflectAnimation;
 	[SerializeField] private GameObject cardEffectPrefab;
+	[SerializeField] private Image loseBackground;
 
 
 
@@ -104,12 +107,43 @@ public class TurnManager : MonoBehaviour
 			else if (enemyCard == CardName.Reflect)
 			{
 				outcomeText.text = "Enemy Wins!";
+				loseBackground.GetComponent<Image>().enabled = true;
+				int children = loseBackground.transform.childCount;
+				for (int i = 0; i < children; i++)
+				{
+					if (loseBackground.transform.GetChild(i).GetComponent<Image>() != null)
+					{
+						loseBackground.transform.GetChild(i).GetComponent<Image>().enabled = true;
+					}
+					else
+					{
+						loseBackground.transform.GetChild(i).GetComponent<Text>().enabled = true;
+					}
+				}
 				deckManager.GameEnd();
 			}
 		}
 		else if (player.GetComponent<Player>().GetHealth() < 1)
 		{
 			outcomeText.text = "Enemy Wins!";
+			loseBackground.GetComponent<Image>().enabled = true;
+			int children = loseBackground.transform.childCount;
+			for (int i = 0; i < children; i++)
+			{
+				Transform child = loseBackground.transform.GetChild(i);
+				if (child.GetComponent<Image>() != null)
+				{
+					child.GetComponent<Image>().enabled = true;
+				}
+				else
+				{
+					child.GetComponent<TextMeshProUGUI>().enabled = true;
+				}
+				if (child.childCount != 0)
+				{
+					child.GetChild(0).GetComponent<TextMeshProUGUI>().enabled = true;
+				}
+			}
 			deckManager.GameEnd();
 		}
 		else if (enemy.GetComponent<Enemy>().GetHealth() < 1)
@@ -624,4 +658,32 @@ public class TurnManager : MonoBehaviour
     {
         return intArray[Random.Range(0, intArray.Length)];
     }
+
+	public void ResetFight()
+	{
+		playerCard = CardName.None;
+		enemyCard = CardName.None;
+		outcomeText.text = "";
+		player.GetComponent<Player>().SetHealth();
+		deckManager.GetComponent<DeckManager>().ResetDeck();
+		loseBackground.GetComponent<Image>().enabled = false;
+		enemy.GetComponent<Enemy>().SetHealth();
+		int children = loseBackground.transform.childCount;
+		for (int i = 0; i < children; i++)
+		{
+			Transform child = loseBackground.transform.GetChild(i);
+			if (child.GetComponent<Image>() != null)
+			{
+				child.GetComponent<Image>().enabled = false;
+			}
+			else
+			{
+				child.GetComponent<TextMeshProUGUI>().enabled = false;
+			}
+			if (child.childCount != 0)
+			{
+				child.GetChild(0).GetComponent<TextMeshProUGUI>().enabled = false;
+			}
+		}
+	}
 }

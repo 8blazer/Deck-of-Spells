@@ -83,6 +83,17 @@ public class DeckManager : MonoBehaviour
 		ChooseCards();
 	}
 
+	public void ResetDeck()
+	{
+		deck.Clear();
+		foreach (CardName card in backupDeck)
+		{
+			deck.Add(card);
+		}
+		comboCounter.GetComponent<Image>().sprite = comboCounterImages[0];
+		ChooseCards();
+	}
+
     public void ChooseCards()
 	{
 		if (comboBroken)
