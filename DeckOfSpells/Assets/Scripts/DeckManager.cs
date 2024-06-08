@@ -91,6 +91,7 @@ public class DeckManager : MonoBehaviour
 			deck.Add(card);
 		}
 		comboCounter.GetComponent<Image>().sprite = comboCounterImages[0];
+		endTurnButton.GetComponent<Button>().interactable = true;
 		ChooseCards();
 	}
 
